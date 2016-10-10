@@ -5,8 +5,8 @@ import org.lwjgl.opengl.GL11;
 import com.functiongrapher.function.Function;
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.ui.GraphWindow;
-import com.functiongrapher.ui.SplashScreen;
 import com.functiongrapher.ui.VarsWindow;
+import com.functiongrapher.ui.WindowManager;
 
 public class Main {
 
@@ -16,9 +16,9 @@ public class Main {
 		// mainFrame.init();
 		// mainFrame.show();
 		
-		new SplashScreen();
-		VarsWindow vars = new VarsWindow();
-
+		WindowManager.showSplashScreen(3000);
+		WindowManager.addWindow(new VarsWindow());
+		
 		FunctionManager.addFunction(new Function() {
 
 			@Override

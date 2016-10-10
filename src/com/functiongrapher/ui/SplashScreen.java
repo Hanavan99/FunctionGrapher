@@ -28,18 +28,9 @@ public class SplashScreen extends JFrame {
 		}
 		int xpos = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - (width / 2);
 		int ypos = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - (height / 2);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(xpos, ypos, width, height);
 		setUndecorated(true);
 		setVisible(true);
-		try {
-			Thread.sleep(3000);
-		} catch (Exception e) {
-			
-		}
-		//setVisible(false);
-		//dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-		//dispose();
 	}
 	
 	@Override
