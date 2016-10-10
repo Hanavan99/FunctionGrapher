@@ -15,8 +15,8 @@ public class SplashScreen extends JFrame {
 
 	private static final long serialVersionUID = 7768312899969173371L;
 
-	private static final int width = 500;
-	private static final int height = 350;
+	private static final int width = 400;
+	private static final int height = 250;
 	
 	private static Image bgimage;
 	
@@ -37,7 +37,7 @@ public class SplashScreen extends JFrame {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.drawImage(bgimage, 0, 0, width - 1, height - 1, null);
+		//g2d.drawImage(bgimage, 0, 0, width - 1, height - 1, null);
 		g2d.setColor(Color.DARK_GRAY);
 		g2d.drawRect(0, 0, width - 1, height - 1);
 		g2d.setColor(Color.GREEN);

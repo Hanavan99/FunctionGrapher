@@ -17,6 +17,8 @@ public class GraphWindow {
 	private static boolean is3D = true;
 	private static boolean lastIs3D;
 	private static boolean isfullscreen = false;
+	private static boolean controlslocked = false;
+	private static float yawspeed = 0.0f;
 
 	private static float camerapitch = -50.0f;
 	private static float camerayaw = 0.0f;
@@ -51,7 +53,7 @@ public class GraphWindow {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				System.out.println(String.valueOf(key) + " pressed");
 				if (action == GLFW.GLFW_PRESS) {
-					
+
 					switch (key) {
 					case GLFW.GLFW_KEY_F11:
 						if (isfullscreen) {
@@ -105,8 +107,7 @@ public class GraphWindow {
 			double dwidth = (double) width[0];
 			double dheight = (double) height[0];
 			GL11.glViewport(0, 0, (int) dwidth, (int) dheight);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT
-					| GL11.GL_DEPTH_BUFFER_BIT /* | GL11.GL_TRANSFORM_BIT */);
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
@@ -126,6 +127,8 @@ public class GraphWindow {
 			// ------------ RENDERING CODE ------------
 
 			FunctionManager.drawFunctions();
+			
+			camerayaw += yawspeed;
 
 			// ------------ -------------- ------------
 
@@ -139,25 +142,26 @@ public class GraphWindow {
 			boolean zoomin = GLFW.glfwGetKey(windowID, GLFW.GLFW_KEY_RIGHT_BRACKET) == 1;
 			boolean zoomout = GLFW.glfwGetKey(windowID, GLFW.GLFW_KEY_LEFT_BRACKET) == 1;
 
-			if (prevmouse1state == 0 && mouse1state == 1) {
-				System.out.println("Mouse Pressed");
-				double[] xpos = new double[1];
-				double[] ypos = new double[1];
-				GLFW.glfwGetCursorPos(windowID, xpos, ypos);
-				mousex = (int) xpos[0];
-				mousey = (int) ypos[0];
-			} else if (prevmouse1state == 1 && mouse1state == 0) {
-				camerayaw += tempyaw;
-				camerapitch += temppitch;
-				tempyaw = 0;
-				temppitch = 0;
-			}
-			if (mouse1state == 1) {
-				double[] xpos = new double[1];
-				double[] ypos = new double[1];
-				GLFW.glfwGetCursorPos(windowID, xpos, ypos);
-				tempyaw = (float) (((double) (xpos[0] - mousex)) / 3);
-				temppitch = (float) (((double) (ypos[0] - mousey)) / 3);
+			if (!controlslocked) {
+				if (prevmouse1state == 0 && mouse1state == 1) {
+					double[] xpos = new double[1];
+					double[] ypos = new double[1];
+					GLFW.glfwGetCursorPos(windowID, xpos, ypos);
+					mousex = (int) xpos[0];
+					mousey = (int) ypos[0];
+				} else if (prevmouse1state == 1 && mouse1state == 0) {
+					camerayaw += tempyaw;
+					camerapitch += temppitch;
+					tempyaw = 0;
+					temppitch = 0;
+				}
+				if (mouse1state == 1) {
+					double[] xpos = new double[1];
+					double[] ypos = new double[1];
+					GLFW.glfwGetCursorPos(windowID, xpos, ypos);
+					tempyaw = (float) (((double) (xpos[0] - mousex)) / 3);
+					temppitch = (float) (((double) (ypos[0] - mousey)) / 3);
+				}
 			}
 
 			if (zoomin && camerazoom > 5) {
@@ -190,6 +194,35 @@ public class GraphWindow {
 		double fh = Math.tan(fovy / 360 * Math.PI) * znear;
 		double fw = fh * aspect;
 		GL11.glFrustum(-fw, fw, -fh, fh, znear, zfar);
+	}
+	
+	public static void setControlState(boolean controllable) {
+		controlslocked = !controllable;
+	}
+	
+	public static void setCameraYaw(float yaw) {
+		camerayaw = yaw;
+	}
+	
+	public static void setCameraPitch(float pitch) {
+		camerapitch = pitch;
+	}
+	
+	public static void setCameraRoll(float roll) {
+		cameraroll = roll;
+	}
+	
+	public static void setYawRotateSpeed(float speed) {
+		yawspeed = speed;
+	}
+	
+	public static void setIsFullscreen(boolean flag) {
+		isfullscreen = flag;
+		if (flag) {
+			GLFW.glfwSetWindowMonitor(windowID, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
+		} else {
+			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
+		}
 	}
 
 }

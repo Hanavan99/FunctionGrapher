@@ -10,6 +10,7 @@ public class VarsWindow extends JFrame {
 	private JTabbedPane pane;
 	private MainPanel mainPanel;
 	private EquationPanel equationPanel;
+	private ViewPanel viewPanel;
 
 	public VarsWindow() {
 		setTitle("Vars");
@@ -25,6 +26,9 @@ public class VarsWindow extends JFrame {
 		
 		equationPanel = new EquationPanel();
 		pane.addTab("Equations", null, equationPanel, "Adding and removing equations and options for them");
+		
+		viewPanel = new ViewPanel();
+		pane.addTab("View", null, viewPanel, "Changing how the view looks");
 		
 	}
 	
