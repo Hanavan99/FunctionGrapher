@@ -43,7 +43,7 @@ public class ViewPanel extends JPanel {
 		add(enableControl);
 		enableControl.addActionListener(controlUpdater);
 
-		yawSpeed = new JSpinner(new SpinnerNumberModel(0.25d, -5.0d, 5.0d, 0.25d));
+		yawSpeed = new JSpinner(new SpinnerNumberModel(0.25d, -5.0d, 5.0d, 0.125d));
 		yawSpeed.setBounds(210, 10, 60, 20);
 		add(yawSpeed);
 

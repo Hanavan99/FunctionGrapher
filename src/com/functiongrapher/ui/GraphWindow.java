@@ -30,6 +30,8 @@ public class GraphWindow {
 	private static float cameraroll = 0.0f;
 	private static float camerafov = 70.0f;
 	private static float camerazoom = 30.0f;
+	
+	private static int fpscnt = 0;
 
 	private static float temppitch;
 	private static float tempyaw;
@@ -200,6 +202,9 @@ public class GraphWindow {
 					}
 				}
 			}
+			
+			fpscnt++;
+			
 		}
 
 		GLFW.glfwDestroyWindow(windowID);
@@ -246,6 +251,14 @@ public class GraphWindow {
 		} else {
 			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
+	}
+	
+	public static int getFPS() {
+		return fpscnt;
+	}
+	
+	public static void resetFPS() {
+		fpscnt = 0;
 	}
 
 	public static void takeScreenshot() {

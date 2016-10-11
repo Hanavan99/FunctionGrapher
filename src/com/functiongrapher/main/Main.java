@@ -1,5 +1,9 @@
 package com.functiongrapher.main;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.Timer;
+
 import org.lwjgl.opengl.GL11;
 
 import com.functiongrapher.function.Function;
@@ -14,6 +18,12 @@ public class Main {
 		
 		WindowManager.showSplashScreen(3000);
 		WindowManager.addWindow(new VarsWindow());
+		
+		Timer fpsmeter = new Timer(1000, (ActionEvent e) -> {
+			System.out.println(GraphWindow.getFPS());
+			GraphWindow.resetFPS();
+		});
+		fpsmeter.start();
 		
 		FunctionManager.addFunction(new Function() {
 			@Override
