@@ -27,8 +27,8 @@ public class Main {
 		
 		FunctionManager.addFunction(new Function() {
 			@Override
-			public double evalPoint(double x, double y) {
-				return Math.sin(Math.pow(x / 2, 2) + Math.pow(y / 2, 2));
+			public double evalPoint(double x, double y, double t) {
+				return Math.sin(Math.pow(x / 2, 2) + Math.pow(y / 2, 2) - t);
 			}
 			@Override
 			public int getDrawMode() {
@@ -40,20 +40,20 @@ public class Main {
 			}
 		});
 
-		FunctionManager.addFunction(new Function() {
-			@Override
-			public double evalPoint(double x, double y) {
-				return Math.pow(x, 2);
-			}
-			@Override
-			public int getDrawMode() {
-				return GL11.GL_LINES;
-			}
-			@Override
-			public byte[] getGraphColor() {
-				return new byte[] { 0b1111111, 0b0, 0b0 };
-			}
-		});
+//		FunctionManager.addFunction(new Function() {
+//			@Override
+//			public double evalPoint(double x, double y, double t) {
+//				return Math.pow(x, 2);
+//			}
+//			@Override
+//			public int getDrawMode() {
+//				return GL11.GL_LINES;
+//			}
+//			@Override
+//			public byte[] getGraphColor() {
+//				return new byte[] { 0b1111111, 0b0, 0b0 };
+//			}
+//		});
 
 		Thread graphwindowthread = new Thread(() -> GraphWindow.init());
 		graphwindowthread.start();

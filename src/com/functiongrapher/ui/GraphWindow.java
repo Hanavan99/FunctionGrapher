@@ -32,6 +32,7 @@ public class GraphWindow {
 	private static float camerazoom = 30.0f;
 	
 	private static int fpscnt = 0;
+	private static long totfps = 0;
 
 	private static float temppitch;
 	private static float tempyaw;
@@ -114,8 +115,10 @@ public class GraphWindow {
 			
 			if (is3D) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
+				//createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
 			} else {
 				createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
+				//createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			}
 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -136,7 +139,7 @@ public class GraphWindow {
 
 			// ------------ RENDERING CODE ------------
 
-			FunctionManager.drawFunctions(is3D);
+			FunctionManager.drawFunctions(is3D, (double) totfps / 10);
 
 			camerayaw += yawspeed;
 
@@ -204,6 +207,7 @@ public class GraphWindow {
 			}
 			
 			fpscnt++;
+			totfps++;
 			
 		}
 
@@ -221,7 +225,7 @@ public class GraphWindow {
 	private static void createOrthographic(int width, int height, float xmin, float xmax, float ymin, float ymax) {
 		double ow = (-xmin + xmax) / 2;
 		double oh = (-ymin + ymax) / 2;
-		GL11.glOrtho(-ow, ow, -oh, oh, -1, 1);
+		GL11.glOrtho(-ow, ow, -oh, oh, -100, 100);
 	}
 
 	public static void setControlState(boolean controllable) {

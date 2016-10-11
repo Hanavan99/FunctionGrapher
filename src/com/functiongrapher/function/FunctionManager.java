@@ -18,7 +18,7 @@ public class FunctionManager {
 		functions.add(f);
 	}
 
-	public static void drawFunctions(boolean is3D) {
+	public static void drawFunctions(boolean is3D, double t) {
 
 		if (is3D) {
 			// Draw 3D axes
@@ -66,9 +66,9 @@ public class FunctionManager {
 				for (double y = ymin; y < ymax; y += delta) {
 					for (Function f : functions) {
 						if (is3D) {
-							double basepoint = f.evalPoint(x, y);
-							double xoffset = f.evalPoint(x + delta, y);
-							double yoffset = f.evalPoint(x, y + delta);
+							double basepoint = f.evalPoint(x, y, t);
+							double xoffset = f.evalPoint(x + delta, y, t);
+							double yoffset = f.evalPoint(x, y + delta, t);
 							GL11.glBegin(f.getDrawMode());
 							GL11.glColor3b(f.getGraphColor()[0], (f.getGraphColor()[1]), f.getGraphColor()[2]);
 							GL11.glVertex3d(x, y, basepoint);
@@ -77,8 +77,8 @@ public class FunctionManager {
 							GL11.glVertex3d((x + delta), y, xoffset);
 							GL11.glEnd();
 						} else {
-							double basepoint = f.evalPoint(x, 0);
-							double xoffset = f.evalPoint(x + delta, 0);
+							double basepoint = f.evalPoint(x, 0, t);
+							double xoffset = f.evalPoint(x + delta, 0, t);
 							GL11.glBegin(f.getDrawMode());
 							GL11.glColor3b(f.getGraphColor()[0], (f.getGraphColor()[1]), f.getGraphColor()[2]);
 							GL11.glVertex2d(x, basepoint);
