@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.functiongrapher.main.ProgramInfo;
@@ -20,14 +18,7 @@ public class SplashScreen extends JFrame {
 	private static final int width = 400;
 	private static final int height = 250;
 	
-	private static Image bgimage;
-	
 	public SplashScreen() {
-		try {
-			bgimage = ImageIO.read(SplashScreen.class.getResourceAsStream("/assets/images/newsin.bmp"));
-		} catch (Exception e) {
-			bgimage = null;
-		}
 		int xpos = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - (width / 2);
 		int ypos = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - (height / 2);
 		setBounds(xpos, ypos, width, height);
@@ -41,7 +32,6 @@ public class SplashScreen extends JFrame {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, width - 1, height - 1);
-		//g2d.drawImage(bgimage, 0, 0, width - 1, height - 1, null);
 		g2d.setColor(Color.GREEN);
 		g2d.drawRect(0, 0, width - 1, height - 1);
 		g2d.setFont(new Font("Arial", Font.PLAIN, 28));
