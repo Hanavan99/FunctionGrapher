@@ -2,6 +2,10 @@ package com.functiongrapher.ui;
 
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -14,10 +18,11 @@ import com.functiongrapher.function.FunctionManager;
 public class GraphWindow {
 
 	private static long windowID;
-	private static boolean is3D = true;
-	private static boolean lastIs3D;
+	private static boolean is3D = false;
 	private static boolean isfullscreen = false;
 	private static boolean controlslocked = false;
+	private static boolean takescreenshot = false;
+	private static BufferedImage screenshot = null;
 	private static float yawspeed = 0.0f;
 
 	private static float camerapitch = -50.0f;
@@ -69,33 +74,26 @@ public class GraphWindow {
 
 		});
 		GLFW.glfwMakeContextCurrent(windowID);
+		//GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(windowID);
 
-		if (is3D) {
-			init3D();
-		} else {
-			init2D();
-		}
-		loop();
-	}
-
-	public static void setIs3D(boolean is3D) {
-		GraphWindow.is3D = is3D;
-	}
-
-	public static void init2D() {
-
-	}
-
-	public static void init3D() {
-		GL.createCapabilities();
+		
+		GL.createCapabilities(); 
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		loop();
+	}
+
+	public static void setIs3D(boolean is3D) {
+		GraphWindow.is3D = is3D;
 	}
 
 	public static void loop() {
@@ -111,23 +109,33 @@ public class GraphWindow {
 			GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
+			
+			if (is3D) {
+				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
+			} else {
+				createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
+			}
+
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glPushMatrix();
 
 			// ------------ TRANSFORMATION ------------
 
-			GL11.glTranslatef(0.0f, 0.0f, -camerazoom);
-			GL11.glRotatef(camerapitch + temppitch, 1.0f, 0.0f, 0.0f);
-			GL11.glRotatef(cameraroll, 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef(camerayaw + tempyaw, 0.0f, 0.0f, 1.0f);
+			if (is3D) {
+				GL11.glTranslatef(0.0f, 0.0f, -camerazoom);
+				GL11.glRotatef(camerapitch + temppitch, 1.0f, 0.0f, 0.0f);
+				GL11.glRotatef(cameraroll, 0.0f, 1.0f, 0.0f);
+				GL11.glRotatef(camerayaw + tempyaw, 0.0f, 0.0f, 1.0f);
+			} else {
+				//GL11.glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+			}
 
 			// ------------ -------------- ------------
 
 			// ------------ RENDERING CODE ------------
 
-			FunctionManager.drawFunctions();
-			
+			FunctionManager.drawFunctions(is3D);
+
 			camerayaw += yawspeed;
 
 			// ------------ -------------- ------------
@@ -174,15 +182,24 @@ public class GraphWindow {
 
 			// ------------ -------------- ------------
 
-			// check if we need to change from 2D to 3D.
-			if (is3D != lastIs3D) {
-				if (is3D) {
-
-				} else {
-
+			// check if we need to create a screenshot.
+			if (takescreenshot) {
+				takescreenshot = false;
+				GL11.glReadBuffer(GL11.GL_FRONT);
+				int pixelformat = 4;
+				ByteBuffer buffer = BufferUtils.createByteBuffer(width[0] * height[0] * pixelformat);
+				GL11.glReadPixels(0, 0, width[0], height[0], GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+				screenshot = new BufferedImage(width[0], height[0], BufferedImage.TYPE_INT_RGB);
+				for (int x = 0; x < width[0]; x++) {
+					for (int y = 0; y < height[0]; y++) {
+						int i = (x + (width[0] * y)) * pixelformat;
+						int r = buffer.get(i) & 0xFF;
+						int g = buffer.get(i + 1) & 0xFF;
+						int b = buffer.get(i + 2) & 0xFF;
+						screenshot.setRGB(x, height[0] - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+					}
 				}
 			}
-			lastIs3D = is3D;
 		}
 
 		GLFW.glfwDestroyWindow(windowID);
@@ -195,27 +212,33 @@ public class GraphWindow {
 		double fw = fh * aspect;
 		GL11.glFrustum(-fw, fw, -fh, fh, znear, zfar);
 	}
-	
+
+	private static void createOrthographic(int width, int height, float xmin, float xmax, float ymin, float ymax) {
+		double ow = (-xmin + xmax) / 2;
+		double oh = (-ymin + ymax) / 2;
+		GL11.glOrtho(-ow, ow, -oh, oh, -1, 1);
+	}
+
 	public static void setControlState(boolean controllable) {
 		controlslocked = !controllable;
 	}
-	
+
 	public static void setCameraYaw(float yaw) {
 		camerayaw = yaw;
 	}
-	
+
 	public static void setCameraPitch(float pitch) {
 		camerapitch = pitch;
 	}
-	
+
 	public static void setCameraRoll(float roll) {
 		cameraroll = roll;
 	}
-	
+
 	public static void setYawRotateSpeed(float speed) {
 		yawspeed = speed;
 	}
-	
+
 	public static void setIsFullscreen(boolean flag) {
 		isfullscreen = flag;
 		if (flag) {
@@ -223,6 +246,14 @@ public class GraphWindow {
 		} else {
 			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
+	}
+
+	public static void takeScreenshot() {
+		takescreenshot = true;
+	}
+
+	public static BufferedImage getScreenshot() {
+		return screenshot;
 	}
 
 }

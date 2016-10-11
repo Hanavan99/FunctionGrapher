@@ -11,6 +11,8 @@ import java.awt.Toolkit;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import com.functiongrapher.main.ProgramInfo;
+
 public class SplashScreen extends JFrame {
 
 	private static final long serialVersionUID = 7768312899969173371L;
@@ -37,12 +39,16 @@ public class SplashScreen extends JFrame {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, width - 1, height - 1);
 		//g2d.drawImage(bgimage, 0, 0, width - 1, height - 1, null);
-		g2d.setColor(Color.DARK_GRAY);
-		g2d.drawRect(0, 0, width - 1, height - 1);
 		g2d.setColor(Color.GREEN);
-		g2d.setFont(new Font("Arial", 24, Font.PLAIN));
-		g2d.drawString("FunctionGrapher v2.0.0", 200, 50);
+		g2d.drawRect(0, 0, width - 1, height - 1);
+		g2d.setFont(new Font("Arial", Font.PLAIN, 28));
+		g2d.drawString(ProgramInfo.PROGRAM_NAME, width - 250, height - 120);
+		g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+		g2d.drawString(ProgramInfo.PROGRAM_VERSION, width - 250, height - 100);
+		g2d.drawString(ProgramInfo.COPYRIGHT_INFO, width - 250, height - 10);
 	}
 	
 	

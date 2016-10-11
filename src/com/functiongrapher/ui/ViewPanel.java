@@ -14,7 +14,7 @@ public class ViewPanel extends JPanel {
 
 	private JCheckBox enableControl;
 	private JSpinner yawSpeed;
-	
+
 	private JCheckBox runFullscreen;
 
 	private ActionListener controlUpdater;
@@ -33,12 +33,12 @@ public class ViewPanel extends JPanel {
 				}
 			}
 		};
-		
+
 		enableControl = new JCheckBox("Enable cinematic mode");
 		enableControl.setBounds(10, 10, 200, 20);
 		add(enableControl);
 		enableControl.addActionListener(controlUpdater);
-		
+
 		yawSpeed = new JSpinner(new SpinnerNumberModel(0.25d, -5.0d, 5.0d, 0.25d));
 		yawSpeed.setBounds(210, 10, 60, 20);
 		add(yawSpeed);
@@ -47,7 +47,7 @@ public class ViewPanel extends JPanel {
 		runFullscreen.setBounds(10, 40, 210, 20);
 		add(runFullscreen);
 		runFullscreen.addActionListener((ActionEvent e) -> GraphWindow.setIsFullscreen(runFullscreen.isSelected()));
-		
+
 	}
 
 }
