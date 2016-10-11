@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -16,8 +17,11 @@ public class ViewPanel extends JPanel {
 	private JSpinner yawSpeed;
 
 	private JCheckBox runFullscreen;
+	
+	private JComboBox<String> graphicsMode;
 
 	private ActionListener controlUpdater;
+	
 
 	public ViewPanel() {
 		setLayout(null);
@@ -47,6 +51,11 @@ public class ViewPanel extends JPanel {
 		runFullscreen.setBounds(10, 40, 210, 20);
 		add(runFullscreen);
 		runFullscreen.addActionListener((ActionEvent e) -> GraphWindow.setIsFullscreen(runFullscreen.isSelected()));
+		
+		graphicsMode = new JComboBox<String>(new String[] {"2D", "3D"});
+		graphicsMode.setBounds(10, 70, 100, 20);
+		add(graphicsMode);
+		graphicsMode.addActionListener((ActionEvent e) -> GraphWindow.setIs3D(graphicsMode.getSelectedIndex() == 1));
 
 	}
 
