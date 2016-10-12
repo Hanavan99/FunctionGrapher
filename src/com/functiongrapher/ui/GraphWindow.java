@@ -3,11 +3,17 @@ package com.functiongrapher.ui;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage.Buffer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
@@ -30,7 +36,7 @@ public class GraphWindow {
 	private static float cameraroll = 0.0f;
 	private static float camerafov = 70.0f;
 	private static float camerazoom = 30.0f;
-	
+
 	private static int fpscnt = 0;
 	private static long totfps = 0;
 
@@ -76,13 +82,27 @@ public class GraphWindow {
 			}
 
 		});
+		try {
+			/*
+			InputStream s = GraphWindow.class.getResourceAsStream("/assets/images/fgicon32.png");
+			BufferedImage i = ImageIO.read(s);
+			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
+			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
+			buf.order(ByteOrder.nativeOrder());
+			buf.put(pixelData);
+			buf.flip();
+			Buffer img = new Buffer(buf);
+			GLFW.glfwSetWindowIcon(windowID, img);
+			*/
+		} catch (Exception e) {
+			System.out.println("Could not set window icon!");
+			e.printStackTrace();
+		}
 		GLFW.glfwMakeContextCurrent(windowID);
-		//GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(windowID);
 
-		
-		GL.createCapabilities(); 
+		GL.createCapabilities();
 		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -109,7 +129,7 @@ public class GraphWindow {
 			GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			
+
 			if (is3D) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			} else {
@@ -198,10 +218,10 @@ public class GraphWindow {
 					}
 				}
 			}
-			
+
 			fpscnt++;
 			totfps++;
-			
+
 		}
 
 		GLFW.glfwDestroyWindow(windowID);
@@ -249,11 +269,11 @@ public class GraphWindow {
 			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
 	}
-	
+
 	public static int getFPS() {
 		return fpscnt;
 	}
-	
+
 	public static void resetFPS() {
 		fpscnt = 0;
 	}
