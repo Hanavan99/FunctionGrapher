@@ -13,7 +13,6 @@ This is a semi-current list of the current features that are in the program. I c
 ### Planned Features
 This is another semi-current list that contains features that I __will__ be adding to the program. I don't know when I will get to all of them, but most of them will be added to the next release.
 
-+ Entering custom equations
 + Changing the X and Y limits (window)
 + Exporting and importing graph files (loading and saving equations)
 + Changing graph colors and axis/grid colors
