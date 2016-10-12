@@ -1,10 +1,8 @@
 package com.functiongrapher.ui;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
 public class WindowManager {
 
@@ -18,9 +16,6 @@ public class WindowManager {
 		} catch (Exception e) {
 			
 		}
-		Timer t = new Timer(500, (ActionEvent e) -> {
-			//if (GLFW.glfw)
-		});
 		ss.setVisible(false);
 	}
 	
