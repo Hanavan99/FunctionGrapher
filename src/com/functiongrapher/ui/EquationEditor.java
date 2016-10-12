@@ -8,8 +8,10 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -26,8 +28,11 @@ public class EquationEditor extends JPanel {
 	private JLabel nameLabel;
 	private JTextField nameText;
 	private JButton editColor;
+	private JLabel equationLabel;
+	private JComboBox<String> equationType;
 	private JLabel bodyLabel;
 	private JTextArea bodyText;
+	private JScrollPane bodyScroller;
 
 	private Color equationColor = Color.BLACK;
 	private Function function;
@@ -68,8 +73,8 @@ public class EquationEditor extends JPanel {
 		nameText.setBounds(60, 10, 240, 20);
 		add(nameText);
 
-		editColor = new JButton("Change Graph Color...");
-		editColor.setBounds(10, 40, 175, 20);
+		editColor = new JButton("Change Color...");
+		editColor.setBounds(10, 40, 125, 20);
 		add(editColor);
 		editColor.addActionListener((ActionEvent e) -> {
 			equationColor = JColorChooser.showDialog(this, "Graph Color", equationColor);
@@ -80,14 +85,22 @@ public class EquationEditor extends JPanel {
 			System.out.println(equationColor.getGreen());
 			System.out.println(equationColor.getBlue());
 		});
-
+		
+		equationLabel = new JLabel("Mode:");
+		equationLabel.setBounds(145, 40, 50, 20);
+		add(equationLabel);
+		
+		equationType = new JComboBox<String>(new String[] {"Single Statement (Simple)", "Function (Advanced)"});
+		equationType.setBounds(205, 40, 100, 20);
+		add(equationType);
+		
 		bodyLabel = new JLabel("Equation:");
 		bodyLabel.setBounds(10, 70, 100, 20);
 		add(bodyLabel);
 
-		bodyText = new JTextArea();
-		bodyText.setBounds(10, 100, 330, 310);
-		add(bodyText);
+		bodyText = new JTextArea("0");
+		//bodyText.setBounds(10, 100, 330, 310);
+		//add(bodyText);
 		bodyText.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -105,6 +118,9 @@ public class EquationEditor extends JPanel {
 			}
 
 		});
+		bodyScroller = new JScrollPane(bodyText);
+		bodyScroller.setBounds(10, 100, 290, 310);
+		add(bodyScroller);
 	}
 
 	public void updateEvalStatement() {

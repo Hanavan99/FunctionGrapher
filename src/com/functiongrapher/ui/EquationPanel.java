@@ -6,6 +6,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -19,14 +20,14 @@ public class EquationPanel extends JPanel {
 	private JButton addEquation;
 	private JButton delEquation;
 	
+	private JScrollPane listScroller;
+	
 	private DefaultListModel<EquationEditor> elist = new DefaultListModel<EquationEditor>();
 	
 	public EquationPanel() {
 		setLayout(null);
 		
 		equationList = new JList<EquationEditor>(elist);
-		equationList.setBounds(10, 10, 150, 390);
-		add(equationList);
 		equationList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -39,6 +40,9 @@ public class EquationPanel extends JPanel {
 				}
 			}
 		});
+		listScroller = new JScrollPane(equationList);
+		listScroller.setBounds(10, 10, 150, 390);
+		add(listScroller);
 		
 		addEquation = new JButton("Add");
 		addEquation.setBounds(10, 410, 70, 20);

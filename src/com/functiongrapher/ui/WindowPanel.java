@@ -71,20 +71,20 @@ public class WindowPanel extends JPanel {
 		sYmax.addChangeListener((ChangeEvent e) -> FunctionManager.setYmax((double) sYmax.getValue()));
 		
 		lGridStepX2D = new JLabel("Grid step X:");
-		lGridStepX2D.setBounds(120, 10, 60, 20);
+		lGridStepX2D.setBounds(120, 10, 100, 20);
 		add(lGridStepX2D);
 		
 		lGridStepY2D = new JLabel("Grid step Y:");
-		lGridStepY2D.setBounds(120, 40, 60, 20);
+		lGridStepY2D.setBounds(120, 40, 100, 20);
 		add(lGridStepY2D);
 		
 		sGridStepX2D = new JSpinner(new SpinnerNumberModel(1.0d, 0.125d, 1000.0d, 0.25d));
-		sGridStepX2D.setBounds(180, 10, 50, 20);
+		sGridStepX2D.setBounds(230, 10, 50, 20);
 		add(sGridStepX2D);
 		sGridStepX2D.addChangeListener((ChangeEvent e) -> FunctionManager.setGridStepX2D((double) sGridStepX2D.getValue()));
 		
 		sGridStepY2D = new JSpinner(new SpinnerNumberModel(1.0d, 0.125d, 1000.0d, 0.25d));
-		sGridStepY2D.setBounds(180, 40, 50, 20);
+		sGridStepY2D.setBounds(230, 40, 50, 20);
 		add(sGridStepY2D);
 		sGridStepY2D.addChangeListener((ChangeEvent e) -> FunctionManager.setGridStepY2D((double) sGridStepY2D.getValue()));
 		

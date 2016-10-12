@@ -119,7 +119,9 @@ public class FunctionManager {
 
 		GL11.glLineWidth(3f);
 		if (is3D) {
-			for (Function f : functions) {
+			Function[] funcs = new Function[0];
+			funcs = functions.toArray(funcs);
+			for (Function f : funcs) {
 				GL11.glBegin(f.getDrawMode());
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x < xmax; x += delta3D) {
@@ -141,7 +143,9 @@ public class FunctionManager {
 				GL11.glEnd();
 			}
 		} else {
-			for (Function f : functions) {
+			Function[] funcs = new Function[0];
+			funcs = functions.toArray(funcs);
+			for (Function f : funcs) {
 				GL11.glBegin(f.getDrawMode());
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x < xmax; x += delta2D) {
