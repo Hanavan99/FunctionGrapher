@@ -83,14 +83,12 @@ public class GraphWindow {
 
 		
 		GL.createCapabilities(); 
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		GL11.glClearDepth(1.0f);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		loop();
 	}
@@ -105,8 +103,7 @@ public class GraphWindow {
 
 			int[] width = new int[1], height = new int[1];
 			GLFW.glfwGetWindowSize(windowID, width, height);
-			double dwidth = (double) width[0];
-			double dheight = (double) height[0];
+			double dwidth = (double) width[0], dheight = (double) height[0];
 			GL11.glViewport(0, 0, (int) dwidth, (int) dheight);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -115,10 +112,8 @@ public class GraphWindow {
 			
 			if (is3D) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
-				//createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
 			} else {
 				createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
-				//createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			}
 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -131,8 +126,6 @@ public class GraphWindow {
 				GL11.glRotatef(camerapitch + temppitch, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef(cameraroll, 0.0f, 1.0f, 0.0f);
 				GL11.glRotatef(camerayaw + tempyaw, 0.0f, 0.0f, 1.0f);
-			} else {
-				//GL11.glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
 			}
 
 			// ------------ -------------- ------------

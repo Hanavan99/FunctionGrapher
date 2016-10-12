@@ -6,6 +6,6 @@ public interface Function {
 	
 	public int getDrawMode();
 	
-	public byte[] getGraphColor();
+	public double[] getGraphColor();
 	
 }
