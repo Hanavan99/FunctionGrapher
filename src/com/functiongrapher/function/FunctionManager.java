@@ -8,12 +8,14 @@ public class FunctionManager {
 
 	private static ArrayList<Function> functions = new ArrayList<Function>();
 
-	private static double xmin = -10;
-	private static double xmax = 10;
-	private static double ymin = -10;
-	private static double ymax = 10;
+	private static double xmin = -10.0d;
+	private static double xmax = 10.0d;
+	private static double ymin = -10.0d;
+	private static double ymax = 10.0d;
 	private static double delta2D = 0.0625d;
 	private static double delta3D = 0.5d;
+	private static double gridStepX2D = 1.0d;
+	private static double gridStepY2D = 1.0d;
 
 	public static void addFunction(Function f) {
 		functions.add(f);
@@ -21,6 +23,54 @@ public class FunctionManager {
 	
 	public static void removeFunction(Function f) {
 		functions.remove(f);
+	}
+
+	public static double getXmin() {
+		return xmin;
+	}
+
+	public static void setXmin(double xmin) {
+		FunctionManager.xmin = xmin;
+	}
+
+	public static double getXmax() {
+		return xmax;
+	}
+
+	public static void setXmax(double xmax) {
+		FunctionManager.xmax = xmax;
+	}
+
+	public static double getYmin() {
+		return ymin;
+	}
+
+	public static void setYmin(double ymin) {
+		FunctionManager.ymin = ymin;
+	}
+
+	public static double getYmax() {
+		return ymax;
+	}
+
+	public static void setYmax(double ymax) {
+		FunctionManager.ymax = ymax;
+	}
+
+	public static double getGridStepX2D() {
+		return gridStepX2D;
+	}
+
+	public static void setGridStepX2D(double gridStepX2D) {
+		FunctionManager.gridStepX2D = gridStepX2D;
+	}
+	
+	public static double getGridStepY2D() {
+		return gridStepY2D;
+	}
+
+	public static void setGridStepY2D(double gridStepY2D) {
+		FunctionManager.gridStepY2D = gridStepY2D;
 	}
 
 	public static void drawFunctions(boolean is3D, double t) {
@@ -42,11 +92,11 @@ public class FunctionManager {
 			GL11.glLineWidth(1f);
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glColor3d(0.7d, 0.7d, 0.7d);
-			for (double x = xmin; x < xmax; x += 1) {
+			for (double x = xmin; x < xmax; x += gridStepX2D) {
 				GL11.glVertex2d(x, ymin);
 				GL11.glVertex2d(x, ymax);
 			}
-			for (double y = ymin; y < ymax; y += 1) {
+			for (double y = ymin; y < ymax; y += gridStepY2D) {
 				GL11.glVertex2d(xmin, y);
 				GL11.glVertex2d(xmax, y);
 			}

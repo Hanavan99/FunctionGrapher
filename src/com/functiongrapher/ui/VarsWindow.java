@@ -14,6 +14,7 @@ public class VarsWindow extends JFrame {
 	private JTabbedPane pane;
 	private MainPanel mainPanel;
 	private EquationPanel equationPanel;
+	private WindowPanel windowPanel;
 	private ViewPanel viewPanel;
 
 	public VarsWindow() {
@@ -34,13 +35,16 @@ public class VarsWindow extends JFrame {
 		add(pane);
 
 		mainPanel = new MainPanel();
-		pane.addTab("General", null, mainPanel, "General options for FunctionGrapher");
+		pane.addTab("General", null, mainPanel, "General settings for FunctionGrapher");
 
 		equationPanel = new EquationPanel();
-		pane.addTab("Equations", null, equationPanel, "Adding and removing equations and options for them");
+		pane.addTab("Equations", null, equationPanel, "Edit equations and equation options");
 
+		windowPanel = new WindowPanel();
+		pane.addTab("Window", null, windowPanel, "Edit grid bounds and detail level");
+		
 		viewPanel = new ViewPanel();
-		pane.addTab("View", null, viewPanel, "Changing how the view looks");
+		pane.addTab("View", null, viewPanel, "Change how the view looks");
 
 	}
 

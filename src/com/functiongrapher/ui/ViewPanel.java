@@ -22,7 +22,6 @@ public class ViewPanel extends JPanel {
 
 	private ActionListener controlUpdater;
 	
-
 	public ViewPanel() {
 		setLayout(null);
 

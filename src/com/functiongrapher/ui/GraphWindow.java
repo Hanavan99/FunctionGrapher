@@ -127,7 +127,7 @@ public class GraphWindow {
 			if (is3D) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			} else {
-				createOrthographic(width[0], height[0], -10.0f, 10.0f, -10.0f, 10.0f);
+				createOrthographic(width[0], height[0], (float) FunctionManager.getXmin(), (float) FunctionManager.getXmax(), (float) FunctionManager.getYmin(), (float) FunctionManager.getYmax());
 			}
 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -230,9 +230,7 @@ public class GraphWindow {
 	}
 
 	private static void createOrthographic(int width, int height, float xmin, float xmax, float ymin, float ymax) {
-		double ow = (-xmin + xmax) / 2;
-		double oh = (-ymin + ymax) / 2;
-		GL11.glOrtho(-ow, ow, -oh, oh, -100, 100);
+		GL11.glOrtho(xmin, xmax, ymin, ymax, -1, 1);
 	}
 
 	public static void setControlState(boolean controllable) {
