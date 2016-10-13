@@ -131,9 +131,16 @@ public class EquationEditor extends JPanel {
 		return function;
 	}
 
+	public void setRenameListener(DocumentListener l) {
+		nameText.getDocument().addDocumentListener(l);
+	}
+
 	@Override
 	public String toString() {
-		return nameText.getText();
+		if (!nameText.getText().equals("")) {
+			return nameText.getText();
+		}
+		return "#NULL";
 	}
 
 }
