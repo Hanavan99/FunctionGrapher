@@ -57,7 +57,7 @@ public class EquationPanel extends JPanel {
 		});
 		
 		delEquation = new JButton("Delete");
-		delEquation.setBounds(90, 410, 70, 20);
+		delEquation.setBounds(90, 410, 69, 20);
 		add(delEquation);
 		delEquation.addActionListener((ActionEvent e) -> {
 			if (equationList.getSelectedValue() == null) {

@@ -14,6 +14,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.callbacks.KeyCallback;
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 
@@ -51,7 +52,7 @@ public class GraphWindow {
 			throw new IllegalStateException("GLFW init failed");
 		}
 
-		windowID = GLFW.glfwCreateWindow(640, 480, "FunctionGrapher", MemoryUtil.NULL, MemoryUtil.NULL);
+		windowID = GLFW.glfwCreateWindow(640, 480, ProgramInfo.PROGRAM_NAME, MemoryUtil.NULL, MemoryUtil.NULL);
 		if (windowID == MemoryUtil.NULL) {
 			throw new IllegalStateException("Window creation failed");
 		}

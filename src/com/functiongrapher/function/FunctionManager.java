@@ -20,7 +20,7 @@ public class FunctionManager {
 	public static void addFunction(Function f) {
 		functions.add(f);
 	}
-	
+
 	public static void removeFunction(Function f) {
 		functions.remove(f);
 	}
@@ -64,7 +64,7 @@ public class FunctionManager {
 	public static void setGridStepX2D(double gridStepX2D) {
 		FunctionManager.gridStepX2D = gridStepX2D;
 	}
-	
+
 	public static double getGridStepY2D() {
 		return gridStepY2D;
 	}
@@ -124,20 +124,23 @@ public class FunctionManager {
 			for (Function f : funcs) {
 				GL11.glBegin(f.getDrawMode());
 				GL11.glColor3dv(f.getGraphColor());
-				for (double x = xmin; x < xmax; x += delta3D) {
-					for (double y = ymin; y < ymax; y += delta3D) {
+				for (double x = xmin; x <= xmax; x += delta3D) {
+					for (double y = ymin; y <= ymax; y += delta3D) {
 						double basepoint = f.evalPoint(x, y, t);
 						double xoffset = f.evalPoint(x + delta3D, y, t);
 						double yoffset = f.evalPoint(x, y + delta3D, t);
-						double bothoffset = f.evalPoint(x + delta3D, y + delta3D, t);
-						GL11.glVertex3d(x, y, basepoint);
-						GL11.glVertex3d(x, y + delta3D, yoffset);
-						GL11.glVertex3d(x, y, basepoint);
-						GL11.glVertex3d(x + delta3D, y, xoffset);
-						GL11.glVertex3d(x + delta3D, y + delta3D, bothoffset);
-						GL11.glVertex3d(x, y + delta3D, yoffset);
-						GL11.glVertex3d(x + delta3D, y + delta3D, bothoffset);
-						GL11.glVertex3d(x + delta3D, y, xoffset);
+						if (x > xmax - delta3D) {
+							GL11.glVertex3d(x, y, basepoint);
+							GL11.glVertex3d(x, y + delta3D, yoffset);
+						} else if (y > ymax - delta3D) {
+							GL11.glVertex3d(x, y, basepoint);
+							GL11.glVertex3d(x + delta3D, y, xoffset);
+						} else {
+							GL11.glVertex3d(x, y, basepoint);
+							GL11.glVertex3d(x, y + delta3D, yoffset);
+							GL11.glVertex3d(x, y, basepoint);
+							GL11.glVertex3d(x + delta3D, y, xoffset);
+						}
 					}
 				}
 				GL11.glEnd();

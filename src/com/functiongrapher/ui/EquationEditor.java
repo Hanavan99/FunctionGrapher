@@ -81,28 +81,21 @@ public class EquationEditor extends JPanel {
 			if (equationColor == null) {
 				equationColor = Color.BLACK;
 			}
-			System.out.println(equationColor.getRed());
-			System.out.println(equationColor.getGreen());
-			System.out.println(equationColor.getBlue());
 		});
-		
+
 		equationLabel = new JLabel("Mode:");
-		equationLabel.setBounds(145, 40, 50, 20);
-		add(equationLabel);
-		
-		equationType = new JComboBox<String>(new String[] {"Single Statement (Simple)", "Function (Advanced)"});
-		equationType.setBounds(205, 40, 100, 20);
+		equationLabel.setBounds(145, 40, 35, 20);
+
+		equationType = new JComboBox<String>(new String[] { "Single Statement (Simple)", "Function (Advanced)" });
+		equationType.setBounds(145, 40, 154, 20);
 		add(equationType);
-		
+
 		bodyLabel = new JLabel("Equation:");
 		bodyLabel.setBounds(10, 70, 100, 20);
 		add(bodyLabel);
 
 		bodyText = new JTextArea("0");
-		//bodyText.setBounds(10, 100, 330, 310);
-		//add(bodyText);
 		bodyText.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
 			}
@@ -116,16 +109,19 @@ public class EquationEditor extends JPanel {
 			public void removeUpdate(DocumentEvent arg0) {
 				updateEvalStatement();
 			}
-
 		});
 		bodyScroller = new JScrollPane(bodyText);
-		bodyScroller.setBounds(10, 100, 290, 310);
+		bodyScroller.setBounds(10, 100, 290, 319);
 		add(bodyScroller);
 	}
 
 	public void updateEvalStatement() {
 		try {
-			engine.eval("function sum(x, y, t) { return " + bodyText.getText() + ";}");
+			if (equationType.getSelectedIndex() == 0) {
+				engine.eval("function sum(x, y, t) { return " + bodyText.getText() + ";}");
+			} else {
+				engine.eval("function sum(x, y, t) {" + bodyText.getText() + "}");
+			}
 		} catch (javax.script.ScriptException e) {
 			e.printStackTrace();
 		}
