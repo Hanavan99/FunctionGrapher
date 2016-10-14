@@ -3,11 +3,17 @@ package com.functiongrapher.ui;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage.Buffer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
@@ -52,6 +58,23 @@ public class GraphWindow {
 			throw new IllegalStateException("GLFW init failed");
 		}
 
+		//GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
+		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
+		try {
+			InputStream s = GraphWindow.class.getResourceAsStream("/assets/images/fgicon32.png");
+			BufferedImage i = ImageIO.read(s);
+			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
+			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
+			buf.order(ByteOrder.nativeOrder());
+			buf.put(pixelData);
+			buf.flip();
+			Buffer img = new Buffer(buf);
+			GLFW.glfwSetWindowIcon(windowID, img);
+		} catch (Exception e) {
+			System.out.println("Could not set window icon!");
+			e.printStackTrace();
+		}
+
 		windowID = GLFW.glfwCreateWindow(640, 480, ProgramInfo.PROGRAM_NAME, MemoryUtil.NULL, MemoryUtil.NULL);
 		if (windowID == MemoryUtil.NULL) {
 			throw new IllegalStateException("Window creation failed");
@@ -77,22 +100,7 @@ public class GraphWindow {
 			}
 
 		});
-		try {
-			/*
-			InputStream s = GraphWindow.class.getResourceAsStream("/assets/images/fgicon32.png");
-			BufferedImage i = ImageIO.read(s);
-			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
-			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
-			buf.order(ByteOrder.nativeOrder());
-			buf.put(pixelData);
-			buf.flip();
-			Buffer img = new Buffer(buf);
-			GLFW.glfwSetWindowIcon(windowID, img);
-			*/
-		} catch (Exception e) {
-			System.out.println("Could not set window icon!");
-			e.printStackTrace();
-		}
+
 		GLFW.glfwMakeContextCurrent(windowID);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(windowID);
@@ -104,6 +112,8 @@ public class GraphWindow {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		loop();
 	}

@@ -90,7 +90,7 @@ public class EquationEditor extends JPanel {
 		equationType.setBounds(145, 40, 154, 20);
 		add(equationType);
 
-		bodyLabel = new JLabel("Equation:");
+		bodyLabel = new JLabel("Equation: f(x, y, t)=");
 		bodyLabel.setBounds(10, 70, 100, 20);
 		add(bodyLabel);
 

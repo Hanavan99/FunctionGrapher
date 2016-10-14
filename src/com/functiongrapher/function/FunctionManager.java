@@ -117,7 +117,7 @@ public class FunctionManager {
 			return;
 		}
 
-		GL11.glLineWidth(3f);
+		GL11.glLineWidth(2f);
 		if (is3D) {
 			Function[] funcs = new Function[0];
 			funcs = functions.toArray(funcs);
@@ -141,6 +141,23 @@ public class FunctionManager {
 							GL11.glVertex3d(x, y, basepoint);
 							GL11.glVertex3d(x + delta3D, y, xoffset);
 						}
+					}
+				}
+				GL11.glEnd();
+				double[] color = f.getGraphColor();
+				GL11.glBegin(GL11.GL_QUADS);
+				GL11.glColor4d(color[0], color[1], color[2], 0.25d);
+				for (double x = xmin; x < xmax; x += delta3D) {
+					for (double y = ymin; y < ymax; y += delta3D) {
+						double basepoint = f.evalPoint(x, y, t);
+						double xoffset = f.evalPoint(x + delta3D, y, t);
+						double yoffset = f.evalPoint(x, y + delta3D, t);
+						double bothoffset = f.evalPoint(x + delta3D, y + delta3D, t);
+						GL11.glNormal3d(x, y, 1000.0d);
+						GL11.glVertex3d(x, y, basepoint);
+						GL11.glVertex3d(x + delta3D, y, xoffset);
+						GL11.glVertex3d(x + delta3D, y + delta3D, bothoffset);
+						GL11.glVertex3d(x, y + delta3D, yoffset);
 					}
 				}
 				GL11.glEnd();
