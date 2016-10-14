@@ -122,7 +122,7 @@ public class FunctionManager {
 			Function[] funcs = new Function[0];
 			funcs = functions.toArray(funcs);
 			for (Function f : funcs) {
-				GL11.glBegin(f.getDrawMode());
+				GL11.glBegin(GL11.GL_LINES);
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x <= xmax; x += delta3D) {
 					for (double y = ymin; y <= ymax; y += delta3D) {
@@ -166,7 +166,7 @@ public class FunctionManager {
 			Function[] funcs = new Function[0];
 			funcs = functions.toArray(funcs);
 			for (Function f : funcs) {
-				GL11.glBegin(f.getDrawMode());
+				GL11.glBegin(GL11.GL_LINES);
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x < xmax; x += delta2D) {
 					double basepoint = f.evalPoint(x, 0, t);

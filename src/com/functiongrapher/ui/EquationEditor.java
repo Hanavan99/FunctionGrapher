@@ -55,11 +55,6 @@ public class EquationEditor extends JPanel {
 			}
 
 			@Override
-			public int getDrawMode() {
-				return GL11.GL_LINES;
-			}
-
-			@Override
 			public double[] getGraphColor() {
 				return new double[] { (double) equationColor.getRed() / 255, (double) equationColor.getGreen() / 255, (double) equationColor.getBlue() / 255 };
 			}

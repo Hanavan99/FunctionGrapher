@@ -61,7 +61,7 @@ public class GraphWindow {
 		//GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
 		try {
-			InputStream s = GraphWindow.class.getResourceAsStream("/assets/images/fgicon32.png");
+			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON32_PATH);
 			BufferedImage i = ImageIO.read(s);
 			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
 			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
