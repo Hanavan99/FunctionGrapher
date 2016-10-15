@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import com.functiongrapher.callbacks.KeyCallback;
+import com.functiongrapher.callbacks.KeyCallbackAdapter;
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.main.ProgramInfo;
 
@@ -49,6 +49,8 @@ public class GraphWindow {
 
 	private static int mouse1state;
 	private static int prevmouse1state;
+	
+	private static KeyCallbackAdapter keycb;
 
 	public static void init() {
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -57,7 +59,7 @@ public class GraphWindow {
 		if (initResult == false) {
 			throw new IllegalStateException("GLFW init failed");
 		}
-
+		
 		//GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
 		try {
@@ -80,32 +82,22 @@ public class GraphWindow {
 			throw new IllegalStateException("Window creation failed");
 		}
 
-		GLFW.glfwSetKeyCallback(windowID, new KeyCallback() {
+		keycb = new KeyCallbackAdapter() {
 			@Override
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				System.out.println("invoke() method called");
 				if (action == GLFW.GLFW_PRESS) {
-
 					switch (key) {
 					case GLFW.GLFW_KEY_F11:
-						isfullscreen = !isfullscreen;
-						if (isfullscreen) {
-							GLFW.glfwSetWindowMonitor(windowID, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
-						} else {
-							GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
-						}
+						GraphWindow.setIsFullscreen(true);
 						break;
 					}
 				}
 			}
-			
-			@Override
-			public void callback(long arg0) {
-				System.out.println("callback() method called");
-			}
-
-		});
-
+		};
+		
+		GLFW.glfwSetKeyCallback(windowID, keycb);
+		
 		GLFW.glfwMakeContextCurrent(windowID);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(windowID);
@@ -235,6 +227,7 @@ public class GraphWindow {
 		}
 
 		GLFW.glfwDestroyWindow(windowID);
+		keycb.free();
 		WindowManager.killWindows();
 
 	}
@@ -276,6 +269,10 @@ public class GraphWindow {
 		} else {
 			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
+	}
+	
+	public static long getWindowID() {
+		return windowID;
 	}
 
 	public static int getFPS() {

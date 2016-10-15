@@ -12,7 +12,7 @@ public class Main {
 		WindowManager.addWindow(new VarsWindow());
 
 		// TODO remember the FPS timer...
-		
+
 		Thread graphwindowthread = new Thread(() -> GraphWindow.init());
 		graphwindowthread.start();
 
