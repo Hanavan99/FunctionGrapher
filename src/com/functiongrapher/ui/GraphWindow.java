@@ -83,20 +83,25 @@ public class GraphWindow {
 		GLFW.glfwSetKeyCallback(windowID, new KeyCallback() {
 			@Override
 			public void invoke(long window, int key, int scancode, int action, int mods) {
-				System.out.println(String.valueOf(key) + " pressed");
+				System.out.println("invoke() method called");
 				if (action == GLFW.GLFW_PRESS) {
 
 					switch (key) {
 					case GLFW.GLFW_KEY_F11:
+						isfullscreen = !isfullscreen;
 						if (isfullscreen) {
 							GLFW.glfwSetWindowMonitor(windowID, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
 						} else {
 							GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 						}
-						isfullscreen = !isfullscreen;
 						break;
 					}
 				}
+			}
+			
+			@Override
+			public void callback(long arg0) {
+				System.out.println("callback() method called");
 			}
 
 		});
