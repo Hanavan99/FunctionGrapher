@@ -14,11 +14,14 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage.Buffer;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWScrollCallback;
+import org.lwjgl.glfw.GLFWWindowCloseCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
-import com.functiongrapher.callbacks.KeyCallbackAdapter;
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.main.ProgramInfo;
 
@@ -32,6 +35,8 @@ public class GraphWindow {
 	private static BufferedImage screenshot = null;
 	private static float yawspeed = 0.0f;
 
+	private static int cameraxpos = 0;
+	private static int cameraypos = 0;
 	private static float camerapitch = -50.0f;
 	private static float camerayaw = 0.0f;
 	private static float cameraroll = 0.0f;
@@ -49,18 +54,20 @@ public class GraphWindow {
 
 	private static int mouse1state;
 	private static int prevmouse1state;
-	
-	private static KeyCallbackAdapter keycb;
+
+	private static GLFWKeyCallback keycb;
+	private static GLFWMouseButtonCallback mousecb;
+	private static GLFWScrollCallback scrollcb;
 
 	public static void init() {
+
 		GLFWErrorCallback.createPrint(System.err).set();
 
-		boolean initResult = GLFW.glfwInit();
-		if (initResult == false) {
+		if (GLFW.glfwInit() == false) {
 			throw new IllegalStateException("GLFW init failed");
 		}
 		
-		//GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
+		// GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
 		try {
 			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON32_PATH);
@@ -82,22 +89,80 @@ public class GraphWindow {
 			throw new IllegalStateException("Window creation failed");
 		}
 
-		keycb = new KeyCallbackAdapter() {
-			@Override
-			public void invoke(long window, int key, int scancode, int action, int mods) {
-				System.out.println("invoke() method called");
-				if (action == GLFW.GLFW_PRESS) {
-					switch (key) {
-					case GLFW.GLFW_KEY_F11:
-						GraphWindow.setIsFullscreen(true);
-						break;
+		GLFW.glfwSetKeyCallback(windowID, keycb = GLFWKeyCallback.create((window, key, scancode, action, mods) -> {
+			if (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT) {
+				switch (key) {
+				case GLFW.GLFW_KEY_A:
+					cameraxpos++;
+					break;
+				case GLFW.GLFW_KEY_D:
+					cameraxpos--;
+					break;
+				case GLFW.GLFW_KEY_S:
+					cameraypos++;
+					break;
+				case GLFW.GLFW_KEY_W:
+					cameraypos--;
+					break;
+				case GLFW.GLFW_KEY_LEFT:
+					camerayaw -= 3;
+					break;
+				case GLFW.GLFW_KEY_RIGHT:
+					camerayaw += 3;
+					break;
+				case GLFW.GLFW_KEY_DOWN:
+					camerapitch -= 3;
+					break;
+				case GLFW.GLFW_KEY_UP:
+					camerapitch += 3;
+					break;
+				case GLFW.GLFW_KEY_RIGHT_BRACKET:
+					if (camerazoom >= 5) {
+						camerazoom /= 1.2;
 					}
+					if (camerazoom < 5) {
+						camerazoom = 5;
+					}
+					break;
+				case GLFW.GLFW_KEY_LEFT_BRACKET:
+					if (camerazoom <= 300) {
+						camerazoom *= 1.2;
+					}
+					if (camerazoom > 300) {
+						camerazoom = 300;
+					}
+					break;
+				case GLFW.GLFW_KEY_F7:
+					WindowManager.setWindowVisibility("vars", true);
+					break;
+				case GLFW.GLFW_KEY_F11:
+					isfullscreen = !isfullscreen;
+					setIsFullscreen(isfullscreen);
+					break;
 				}
 			}
-		};
+		}));
+
+		GLFW.glfwSetMouseButtonCallback(windowID, mousecb = GLFWMouseButtonCallback.create((window, button, action, mods) -> {
+			// if (button == GLFW.GLFW_BUTTON)
+		}));
+
+		GLFW.glfwSetScrollCallback(windowID, scrollcb = GLFWScrollCallback.create((window, xoffset, yoffset) -> {
+			if (camerazoom >= 5 && camerazoom <= 300) {
+				camerazoom /= (yoffset * 0.25) + 1;
+			}
+			if (camerazoom < 5) {
+				camerazoom = 5;
+			}
+			if (camerazoom > 300) {
+				camerazoom = 300;
+			}
+		}));
 		
-		GLFW.glfwSetKeyCallback(windowID, keycb);
-		
+		GLFW.glfwSetWindowCloseCallback(windowID, GLFWWindowCloseCallback.create((window) -> {
+			
+		}));
+
 		GLFW.glfwMakeContextCurrent(windowID);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(windowID);
@@ -113,6 +178,8 @@ public class GraphWindow {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		loop();
+		
+		GLFW.glfwTerminate();
 	}
 
 	public static void setIs3D(boolean is3D) {
@@ -148,6 +215,7 @@ public class GraphWindow {
 				GL11.glRotatef(camerapitch + temppitch, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef(cameraroll, 0.0f, 1.0f, 0.0f);
 				GL11.glRotatef(camerayaw + tempyaw, 0.0f, 0.0f, 1.0f);
+				GL11.glTranslatef(cameraxpos, cameraypos, 0.0f);
 			}
 
 			// ------------ -------------- ------------
@@ -167,8 +235,6 @@ public class GraphWindow {
 			// ------------ MOUSE FUNCTION ------------
 
 			mouse1state = GLFW.glfwGetMouseButton(windowID, GLFW.GLFW_MOUSE_BUTTON_1);
-			boolean zoomin = GLFW.glfwGetKey(windowID, GLFW.GLFW_KEY_RIGHT_BRACKET) == 1;
-			boolean zoomout = GLFW.glfwGetKey(windowID, GLFW.GLFW_KEY_LEFT_BRACKET) == 1;
 
 			if (!controlslocked) {
 				if (prevmouse1state == 0 && mouse1state == 1) {
@@ -190,12 +256,6 @@ public class GraphWindow {
 					tempyaw = (float) (((double) (xpos[0] - mousex)) / 3);
 					temppitch = (float) (((double) (ypos[0] - mousey)) / 3);
 				}
-			}
-
-			if (zoomin && camerazoom > 5) {
-				camerazoom /= 1.05;
-			} else if (zoomout && camerazoom < 300) {
-				camerazoom *= 1.05;
 			}
 
 			prevmouse1state = mouse1state;
@@ -228,6 +288,8 @@ public class GraphWindow {
 
 		GLFW.glfwDestroyWindow(windowID);
 		keycb.free();
+		mousecb.free();
+		scrollcb.free();
 		WindowManager.killWindows();
 
 	}
@@ -263,14 +325,13 @@ public class GraphWindow {
 	}
 
 	public static void setIsFullscreen(boolean flag) {
-		isfullscreen = flag;
 		if (flag) {
 			GLFW.glfwSetWindowMonitor(windowID, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
 		} else {
 			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
 	}
-	
+
 	public static long getWindowID() {
 		return windowID;
 	}

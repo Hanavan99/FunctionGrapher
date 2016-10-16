@@ -5,17 +5,19 @@ import com.functiongrapher.ui.VarsWindow;
 import com.functiongrapher.ui.WindowManager;
 
 public class Main {
-
+	
 	public static void main(String[] args) {
-
+		
 		WindowManager.showSplashScreen(3000);
-		WindowManager.addWindow(new VarsWindow());
+		WindowManager.addWindow(new VarsWindow(), "vars");
 
 		// TODO remember the FPS timer...
 
 		Thread graphwindowthread = new Thread(() -> GraphWindow.init());
 		graphwindowthread.start();
-
+		
+		
+		
 	}
 
 }
