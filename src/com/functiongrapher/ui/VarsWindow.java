@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import com.functiongrapher.main.ProgramInfo;
+
 public class VarsWindow extends JFrame {
 
 	private static final long serialVersionUID = 651724490657554571L;
@@ -24,7 +26,7 @@ public class VarsWindow extends JFrame {
 		setVisible(true);
 
 		try {
-			InputStream s = GraphWindow.class.getResourceAsStream("/assets/images/fgicon64.png");
+			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON64_PATH);
 			BufferedImage i = ImageIO.read(s);
 			setIconImage(i);
 		} catch (Exception e) {

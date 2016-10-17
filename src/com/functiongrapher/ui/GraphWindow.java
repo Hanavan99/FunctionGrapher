@@ -67,10 +67,12 @@ public class GraphWindow {
 			throw new IllegalStateException("GLFW init failed");
 		}
 		
-		// GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
+		GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
+		GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
+		
 		try {
-			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON32_PATH);
+			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON64_PATH);
 			BufferedImage i = ImageIO.read(s);
 			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
 			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);

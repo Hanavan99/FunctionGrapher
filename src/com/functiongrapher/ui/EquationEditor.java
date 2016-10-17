@@ -17,8 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.lwjgl.opengl.GL11;
-
 import com.functiongrapher.function.Function;
 
 public class EquationEditor extends JPanel {
@@ -86,7 +84,7 @@ public class EquationEditor extends JPanel {
 		add(equationType);
 
 		bodyLabel = new JLabel("Equation: f(x, y, t)=");
-		bodyLabel.setBounds(10, 70, 100, 20);
+		bodyLabel.setBounds(10, 70, 150, 20);
 		add(bodyLabel);
 
 		bodyText = new JTextArea("0");
@@ -135,7 +133,7 @@ public class EquationEditor extends JPanel {
 		if (!nameText.getText().equals("")) {
 			return nameText.getText();
 		}
-		return "#NULL";
+		return "Unnamed Equation";
 	}
 
 }

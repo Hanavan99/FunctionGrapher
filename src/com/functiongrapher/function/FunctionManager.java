@@ -12,8 +12,8 @@ public class FunctionManager {
 	private static double xmax = 10.0d;
 	private static double ymin = -10.0d;
 	private static double ymax = 10.0d;
-	private static double delta2D = 0.0625d;
-	private static double delta3D = 0.5d;
+	private static double delta2D = 1d / 32;
+	private static double delta3D = 1d / 2;
 	private static double gridStepX2D = 1.0d;
 	private static double gridStepY2D = 1.0d;
 
@@ -92,11 +92,11 @@ public class FunctionManager {
 			GL11.glLineWidth(1f);
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glColor3d(0.7d, 0.7d, 0.7d);
-			for (double x = xmin; x < xmax; x += gridStepX2D) {
+			for (double x = xmin; x <= xmax; x += gridStepX2D) {
 				GL11.glVertex2d(x, ymin);
 				GL11.glVertex2d(x, ymax);
 			}
-			for (double y = ymin; y < ymax; y += gridStepY2D) {
+			for (double y = ymin; y <= ymax; y += gridStepY2D) {
 				GL11.glVertex2d(xmin, y);
 				GL11.glVertex2d(xmax, y);
 			}
@@ -117,8 +117,8 @@ public class FunctionManager {
 			return;
 		}
 
-		GL11.glLineWidth(2f);
 		if (is3D) {
+			GL11.glLineWidth(2f);
 			Function[] funcs = new Function[0];
 			funcs = functions.toArray(funcs);
 			for (Function f : funcs) {
@@ -163,12 +163,13 @@ public class FunctionManager {
 				GL11.glEnd();
 			}
 		} else {
+			GL11.glLineWidth(3f);
 			Function[] funcs = new Function[0];
 			funcs = functions.toArray(funcs);
 			for (Function f : funcs) {
 				GL11.glBegin(GL11.GL_LINES);
 				GL11.glColor3dv(f.getGraphColor());
-				for (double x = xmin; x < xmax; x += delta2D) {
+				for (double x = xmin; x <= xmax; x += delta2D) {
 					double basepoint = f.evalPoint(x, 0, t);
 					double xoffset = f.evalPoint(x + delta2D, 0, t);
 					GL11.glVertex2d(x, basepoint);
