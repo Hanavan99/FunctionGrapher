@@ -39,6 +39,11 @@ public class GraphWindow {
 
 	private static int mousex;
 	private static int mousey;
+	
+	private static int windowx;
+	private static int windowy;
+	private static int windowwidth;
+	private static int windowheight;
 
 	private static int mouse1state;
 	private static int prevmouse1state;
@@ -247,9 +252,17 @@ public class GraphWindow {
 
 	public static void setIsFullscreen(boolean flag) {
 		if (flag) {
+			int[] xpos = new int[1]; int[] ypos = new int[1];
+			GLFW.glfwGetWindowPos(window, xpos, ypos);
+			windowx = xpos[0];
+			windowy = ypos[0];
+			int[] width = new int[1], height = new int[1];
+			GLFW.glfwGetWindowSize(window, width, height);
+			windowwidth = width[0];
+			windowheight = height[0];
 			GLFW.glfwSetWindowMonitor(window, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedMonitor(), 0, 0, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getWidth(), ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getHeight(), (int) MemoryUtil.NULL);
 		} else {
-			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 50, 50, ProgramInfo.GRAPHWINDOW_WIDTH, ProgramInfo.GRAPHWINDOW_HEIGHT, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, windowx, windowy, windowwidth, windowheight, (int) MemoryUtil.NULL);
 		}
 	}
 
