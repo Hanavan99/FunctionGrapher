@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 
@@ -246,9 +247,9 @@ public class GraphWindow {
 
 	public static void setIsFullscreen(boolean flag) {
 		if (flag) {
-			GLFW.glfwSetWindowMonitor(window, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedMonitor(), 0, 0, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getWidth(), ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getHeight(), (int) MemoryUtil.NULL);
 		} else {
-			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 50, 50, 500, 500, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 50, 50, ProgramInfo.GRAPHWINDOW_WIDTH, ProgramInfo.GRAPHWINDOW_HEIGHT, (int) MemoryUtil.NULL);
 		}
 	}
 

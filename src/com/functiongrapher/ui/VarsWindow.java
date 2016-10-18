@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.util.ScreenResolution;
 
 public class VarsWindow extends JFrame {
 
@@ -18,7 +19,8 @@ public class VarsWindow extends JFrame {
 	private EquationPanel equationPanel;
 	private WindowPanel windowPanel;
 	private ViewPanel viewPanel;
-
+	private GraphicsPanel graphicsPanel;
+	
 	public VarsWindow() {
 		setTitle("Vars");
 		setBounds(100, 100, 500, 500);
@@ -44,10 +46,29 @@ public class VarsWindow extends JFrame {
 
 		windowPanel = new WindowPanel();
 		pane.addTab("Window", null, windowPanel, "Edit grid bounds and detail level");
-		
+
 		viewPanel = new ViewPanel();
 		pane.addTab("View", null, viewPanel, "Change how the view looks");
+		
+		graphicsPanel = new GraphicsPanel();
+		pane.addTab("Graphics", null, graphicsPanel, "Change settings about the graph window");
 
 	}
-
+	
+	public void setMonitorPointers(long[] monitors) {
+		graphicsPanel.setMonitorPointers(monitors);
+	}
+	
+	public long[] getMonitorPointers() {
+		return graphicsPanel.getMonitorPointers();
+	}
+	
+	public long getSelectedMonitor() {
+		return graphicsPanel.getSelectedMonitor();
+	}
+	
+	public ScreenResolution getSelectedResolution() {
+		return graphicsPanel.getSelectedResolution();
+	}
+	
 }

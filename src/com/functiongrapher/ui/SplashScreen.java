@@ -25,6 +25,7 @@ public class SplashScreen extends JFrame {
 		int ypos = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - (height / 2);
 		setBounds(xpos, ypos, width, height);
 		setUndecorated(true);
+		setAlwaysOnTop(true);
 		setVisible(true);
 	}
 	

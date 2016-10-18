@@ -8,6 +8,7 @@ import java.nio.ByteOrder;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage.Buffer;
@@ -21,6 +22,7 @@ import org.lwjgl.system.MemoryUtil;
 import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.GraphWindow;
+import com.functiongrapher.ui.VarsWindow;
 import com.functiongrapher.ui.WindowManager;
 
 public class GraphicsController {
@@ -34,7 +36,7 @@ public class GraphicsController {
 	public static long getWindowID() {
 		return window;
 	}
-	
+
 	public static void initGLFW() {
 		ProgramLogger.setSplashScreenSubtext("Initializing GLFW...");
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -57,7 +59,7 @@ public class GraphicsController {
 			Buffer img = new Buffer(buf);
 			GLFW.glfwSetWindowIcon(window, img);
 		} catch (Exception e) {
-			System.out.println("Could not set window icon!");
+			ProgramLogger.LOGGER.warning("Could not set window icon!");
 			e.printStackTrace();
 		}
 
@@ -69,6 +71,13 @@ public class GraphicsController {
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(window);
+		
+		PointerBuffer b = GLFW.glfwGetMonitors();
+		long[] monitors = new long[b.capacity()];
+		for (int i = 0; i < b.capacity(); i++) {
+			monitors[i] = b.get(i);
+		}
+		((VarsWindow) WindowManager.getWindow("vars")).setMonitorPointers(monitors);
 	}
 
 	public static void attachCallbacks() {

@@ -12,7 +12,7 @@ public class Main {
 		
 		ProgramLogger.LOGGER.info("Starting program");
 		
-		WindowManager.showSplashScreen(3000, 200);
+		WindowManager.showSplashScreen(3000, 1000);
 		ProgramLogger.setSplashScreenSubtext("Opening vars window...");
 		WindowManager.addWindow(new VarsWindow(), "vars");
 
