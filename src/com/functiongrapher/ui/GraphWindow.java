@@ -3,31 +3,18 @@ package com.functiongrapher.ui;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWImage.Buffer;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-import org.lwjgl.glfw.GLFWScrollCallback;
-import org.lwjgl.glfw.GLFWWindowCloseCallback;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
-import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 
-	private static long windowID;
+	private static long window;
 	private static boolean is3D = false;
 	private static boolean isfullscreen = false;
 	private static boolean controlslocked = false;
@@ -54,134 +41,71 @@ public class GraphWindow {
 
 	private static int mouse1state;
 	private static int prevmouse1state;
-
-	private static GLFWKeyCallback keycb;
-	private static GLFWMouseButtonCallback mousecb;
-	private static GLFWScrollCallback scrollcb;
-
-	public static void init() {
-
-		GLFWErrorCallback.createPrint(System.err).set();
-
-		if (GLFW.glfwInit() == false) {
-			throw new IllegalStateException("GLFW init failed");
+	
+	public static void mouseScrolled(double amount) {
+		if (camerazoom >= 5 && camerazoom <= 300) {
+			camerazoom /= (amount * 0.25) + 1;
 		}
-		
-		GLFW.glfwWindowHint(GLFW.GLFW_STENCIL_BITS, 8);
-		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
-		GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
-		
-		try {
-			InputStream s = GraphWindow.class.getResourceAsStream(ProgramInfo.ICON64_PATH);
-			BufferedImage i = ImageIO.read(s);
-			byte[] pixelData = ((DataBufferByte) i.getRaster().getDataBuffer()).getData();
-			ByteBuffer buf = ByteBuffer.allocateDirect(pixelData.length);
-			buf.order(ByteOrder.nativeOrder());
-			buf.put(pixelData);
-			buf.flip();
-			Buffer img = new Buffer(buf);
-			GLFW.glfwSetWindowIcon(windowID, img);
-		} catch (Exception e) {
-			System.out.println("Could not set window icon!");
-			e.printStackTrace();
+		if (camerazoom < 5) {
+			camerazoom = 5;
 		}
-
-		windowID = GLFW.glfwCreateWindow(640, 480, ProgramInfo.PROGRAM_NAME, MemoryUtil.NULL, MemoryUtil.NULL);
-		if (windowID == MemoryUtil.NULL) {
-			throw new IllegalStateException("Window creation failed");
+		if (camerazoom > 300) {
+			camerazoom = 300;
 		}
-
-		GLFW.glfwSetKeyCallback(windowID, keycb = GLFWKeyCallback.create((window, key, scancode, action, mods) -> {
-			if (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT) {
-				switch (key) {
-				case GLFW.GLFW_KEY_A:
-					cameraxpos++;
-					break;
-				case GLFW.GLFW_KEY_D:
-					cameraxpos--;
-					break;
-				case GLFW.GLFW_KEY_S:
-					cameraypos++;
-					break;
-				case GLFW.GLFW_KEY_W:
-					cameraypos--;
-					break;
-				case GLFW.GLFW_KEY_LEFT:
-					camerayaw -= 3;
-					break;
-				case GLFW.GLFW_KEY_RIGHT:
-					camerayaw += 3;
-					break;
-				case GLFW.GLFW_KEY_DOWN:
-					camerapitch -= 3;
-					break;
-				case GLFW.GLFW_KEY_UP:
-					camerapitch += 3;
-					break;
-				case GLFW.GLFW_KEY_RIGHT_BRACKET:
-					if (camerazoom >= 5) {
-						camerazoom /= 1.2;
-					}
-					if (camerazoom < 5) {
-						camerazoom = 5;
-					}
-					break;
-				case GLFW.GLFW_KEY_LEFT_BRACKET:
-					if (camerazoom <= 300) {
-						camerazoom *= 1.2;
-					}
-					if (camerazoom > 300) {
-						camerazoom = 300;
-					}
-					break;
-				case GLFW.GLFW_KEY_F7:
-					WindowManager.setWindowVisibility("vars", true);
-					break;
-				case GLFW.GLFW_KEY_F11:
-					isfullscreen = !isfullscreen;
-					setIsFullscreen(isfullscreen);
-					break;
+	}
+	
+	public static void keyStateChanged(int key, int action) {
+		if (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT) {
+			switch (key) {
+			case GLFW.GLFW_KEY_A:
+				cameraxpos++;
+				break;
+			case GLFW.GLFW_KEY_D:
+				cameraxpos--;
+				break;
+			case GLFW.GLFW_KEY_S:
+				cameraypos++;
+				break;
+			case GLFW.GLFW_KEY_W:
+				cameraypos--;
+				break;
+			case GLFW.GLFW_KEY_LEFT:
+				camerayaw -= 3;
+				break;
+			case GLFW.GLFW_KEY_RIGHT:
+				camerayaw += 3;
+				break;
+			case GLFW.GLFW_KEY_DOWN:
+				camerapitch -= 3;
+				break;
+			case GLFW.GLFW_KEY_UP:
+				camerapitch += 3;
+				break;
+			case GLFW.GLFW_KEY_RIGHT_BRACKET:
+				if (camerazoom >= 5) {
+					camerazoom /= 1.2;
 				}
+				if (camerazoom < 5) {
+					camerazoom = 5;
+				}
+				break;
+			case GLFW.GLFW_KEY_LEFT_BRACKET:
+				if (camerazoom <= 300) {
+					camerazoom *= 1.2;
+				}
+				if (camerazoom > 300) {
+					camerazoom = 300;
+				}
+				break;
+			case GLFW.GLFW_KEY_F7:
+				WindowManager.setWindowVisibility("vars", true);
+				break;
+			case GLFW.GLFW_KEY_F11:
+				isfullscreen = !isfullscreen;
+				setIsFullscreen(isfullscreen);
+				break;
 			}
-		}));
-
-		GLFW.glfwSetMouseButtonCallback(windowID, mousecb = GLFWMouseButtonCallback.create((window, button, action, mods) -> {
-			// if (button == GLFW.GLFW_BUTTON)
-		}));
-
-		GLFW.glfwSetScrollCallback(windowID, scrollcb = GLFWScrollCallback.create((window, xoffset, yoffset) -> {
-			if (camerazoom >= 5 && camerazoom <= 300) {
-				camerazoom /= (yoffset * 0.25) + 1;
-			}
-			if (camerazoom < 5) {
-				camerazoom = 5;
-			}
-			if (camerazoom > 300) {
-				camerazoom = 300;
-			}
-		}));
-		
-		GLFW.glfwSetWindowCloseCallback(windowID, GLFWWindowCloseCallback.create((window) -> {
-			
-		}));
-
-		GLFW.glfwMakeContextCurrent(windowID);
-		GLFW.glfwSwapInterval(1);
-		GLFW.glfwShowWindow(windowID);
-
-		GL.createCapabilities();
-		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		GL11.glClearDepth(1.0f);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-		loop();
-		
-		GLFW.glfwTerminate();
+		}
 	}
 
 	public static void setIs3D(boolean is3D) {
@@ -190,10 +114,10 @@ public class GraphWindow {
 
 	public static void loop() {
 
-		while (!glfwWindowShouldClose(windowID)) {
+		while (!glfwWindowShouldClose(window)) {
 
 			int[] width = new int[1], height = new int[1];
-			GLFW.glfwGetWindowSize(windowID, width, height);
+			GLFW.glfwGetWindowSize(window, width, height);
 			double dwidth = (double) width[0], dheight = (double) height[0];
 			GL11.glViewport(0, 0, (int) dwidth, (int) dheight);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -231,18 +155,18 @@ public class GraphWindow {
 			// ------------ -------------- ------------
 
 			GL11.glPopMatrix();
-			GLFW.glfwSwapBuffers(windowID);
+			GLFW.glfwSwapBuffers(window);
 			GLFW.glfwPollEvents();
 
 			// ------------ MOUSE FUNCTION ------------
 
-			mouse1state = GLFW.glfwGetMouseButton(windowID, GLFW.GLFW_MOUSE_BUTTON_1);
+			mouse1state = GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_1);
 
 			if (!controlslocked) {
 				if (prevmouse1state == 0 && mouse1state == 1) {
 					double[] xpos = new double[1];
 					double[] ypos = new double[1];
-					GLFW.glfwGetCursorPos(windowID, xpos, ypos);
+					GLFW.glfwGetCursorPos(window, xpos, ypos);
 					mousex = (int) xpos[0];
 					mousey = (int) ypos[0];
 				} else if (prevmouse1state == 1 && mouse1state == 0) {
@@ -254,7 +178,7 @@ public class GraphWindow {
 				if (mouse1state == 1) {
 					double[] xpos = new double[1];
 					double[] ypos = new double[1];
-					GLFW.glfwGetCursorPos(windowID, xpos, ypos);
+					GLFW.glfwGetCursorPos(window, xpos, ypos);
 					tempyaw = (float) (((double) (xpos[0] - mousex)) / 3);
 					temppitch = (float) (((double) (ypos[0] - mousey)) / 3);
 				}
@@ -287,12 +211,6 @@ public class GraphWindow {
 			totfps++;
 
 		}
-
-		GLFW.glfwDestroyWindow(windowID);
-		keycb.free();
-		mousecb.free();
-		scrollcb.free();
-		WindowManager.killWindows();
 
 	}
 
@@ -328,14 +246,14 @@ public class GraphWindow {
 
 	public static void setIsFullscreen(boolean flag) {
 		if (flag) {
-			GLFW.glfwSetWindowMonitor(windowID, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
 		} else {
-			GLFW.glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
 		}
 	}
 
-	public static long getWindowID() {
-		return windowID;
+	public static void setWindowID(long window) {
+		GraphWindow.window = window;
 	}
 
 	public static int getFPS() {
