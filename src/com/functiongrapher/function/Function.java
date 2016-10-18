@@ -6,4 +6,7 @@ public interface Function {
 	
 	public double[] getGraphColor();
 	
+	public boolean useMethodForColor();
+	
+	public double getEvaluatedHue(double x, double y, double t);
 }

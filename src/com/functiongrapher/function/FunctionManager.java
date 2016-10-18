@@ -1,5 +1,6 @@
 package com.functiongrapher.function;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -129,6 +130,10 @@ public class FunctionManager {
 						double basepoint = f.evalPoint(x, y, t);
 						double xoffset = f.evalPoint(x + delta3D, y, t);
 						double yoffset = f.evalPoint(x, y + delta3D, t);
+						if (f.useMethodForColor()) {
+							Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, y, t), 1.0f, 1.0f);
+							GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255);
+						}
 						if (x > xmax - delta3D) {
 							GL11.glVertex3d(x, y, basepoint);
 							GL11.glVertex3d(x, y + delta3D, yoffset);
@@ -153,7 +158,10 @@ public class FunctionManager {
 						double xoffset = f.evalPoint(x + delta3D, y, t);
 						double yoffset = f.evalPoint(x, y + delta3D, t);
 						double bothoffset = f.evalPoint(x + delta3D, y + delta3D, t);
-						GL11.glNormal3d(x, y, 1000.0d);
+						if (f.useMethodForColor()) {
+							Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, y, t), 1.0f, 1.0f);
+							GL11.glColor4d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255, 0.25d);
+						}
 						GL11.glVertex3d(x, y, basepoint);
 						GL11.glVertex3d(x + delta3D, y, xoffset);
 						GL11.glVertex3d(x + delta3D, y + delta3D, bothoffset);

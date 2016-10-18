@@ -7,6 +7,7 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,6 +32,7 @@ public class EquationEditor extends JPanel {
 	private JLabel bodyLabel;
 	private JTextArea bodyText;
 	private JScrollPane bodyScroller;
+	private JCheckBox evalColor;
 
 	private Color equationColor = Color.BLACK;
 	private Function function;
@@ -46,7 +48,7 @@ public class EquationEditor extends JPanel {
 			@Override
 			public double evalPoint(double x, double y, double t) {
 				try {
-					return Double.valueOf(((Invocable) engine).invokeFunction("sum", new Object[] { x, y, t }).toString()).doubleValue();
+					return Double.valueOf(((Invocable) engine).invokeFunction("evalNumber", new Object[] { x, y, t }).toString()).doubleValue();
 				} catch (NumberFormatException | NoSuchMethodException | javax.script.ScriptException | NullPointerException e) {
 					return 0.0d;
 				}
@@ -55,6 +57,20 @@ public class EquationEditor extends JPanel {
 			@Override
 			public double[] getGraphColor() {
 				return new double[] { (double) equationColor.getRed() / 255, (double) equationColor.getGreen() / 255, (double) equationColor.getBlue() / 255 };
+			}
+			
+			@Override
+			public double getEvaluatedHue(double x, double y, double t) {
+				try {
+					return Double.valueOf(((Invocable) engine).invokeFunction("evalColor", new Object[] { x, y, t }).toString()).doubleValue();
+				} catch (NumberFormatException | NoSuchMethodException | javax.script.ScriptException | NullPointerException e) {
+					return 0.0d;
+				}
+			}
+			
+			@Override
+			public boolean useMethodForColor() {
+				return evalColor.isSelected();
 			}
 		};
 
@@ -79,7 +95,7 @@ public class EquationEditor extends JPanel {
 		equationLabel = new JLabel("Mode:");
 		equationLabel.setBounds(145, 40, 35, 20);
 
-		equationType = new JComboBox<String>(new String[] { "Single Statement (Simple)", "Function (Advanced)" });
+		equationType = new JComboBox<String>(new String[] { "Single Statement (Simple)", "Function (Advanced)", "Empty (Insane)" });
 		equationType.setBounds(145, 40, 154, 20);
 		add(equationType);
 
@@ -104,19 +120,24 @@ public class EquationEditor extends JPanel {
 			}
 		});
 		bodyScroller = new JScrollPane(bodyText);
-		bodyScroller.setBounds(10, 100, 290, 319);
+		bodyScroller.setBounds(10, 100, 290, 290);
 		add(bodyScroller);
+		
+		evalColor = new JCheckBox("Evaluate color with getColor() method");
+		evalColor.setBounds(10, 400, 300, 20);
+		add(evalColor);
 	}
 
 	public void updateEvalStatement() {
 		try {
 			if (equationType.getSelectedIndex() == 0) {
-				engine.eval("function sum(x, y, t) { return " + bodyText.getText() + ";}");
+				engine.eval("function evalNumber(x, y, t) { return " + bodyText.getText() + ";}");
+			} else if (equationType.getSelectedIndex() == 1) {
+				engine.eval("function evalNumber(x, y, t) {" + bodyText.getText() + "}");
 			} else {
-				engine.eval("function sum(x, y, t) {" + bodyText.getText() + "}");
+				engine.eval(bodyText.getText());
 			}
 		} catch (javax.script.ScriptException e) {
-			e.printStackTrace();
 		}
 	}
 
