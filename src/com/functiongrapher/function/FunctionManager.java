@@ -180,6 +180,10 @@ public class FunctionManager {
 				for (double x = xmin; x <= xmax; x += delta2D) {
 					double basepoint = f.evalPoint(x, 0, t);
 					double xoffset = f.evalPoint(x + delta2D, 0, t);
+					if (f.useMethodForColor()) {
+						Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, 0, t), 1.0f, 1.0f);
+						GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255);
+					}
 					GL11.glVertex2d(x, basepoint);
 					GL11.glVertex2d(x + delta2D, xoffset);
 				}
