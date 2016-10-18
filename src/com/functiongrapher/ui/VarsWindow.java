@@ -20,6 +20,7 @@ public class VarsWindow extends JFrame {
 	private WindowPanel windowPanel;
 	private ViewPanel viewPanel;
 	private GraphicsPanel graphicsPanel;
+	private IOPanel ioPanel;
 	
 	public VarsWindow() {
 		setTitle("Vars");
@@ -52,6 +53,9 @@ public class VarsWindow extends JFrame {
 		
 		graphicsPanel = new GraphicsPanel();
 		pane.addTab("Graphics", null, graphicsPanel, "Change settings about the graph window");
+		
+		ioPanel = new IOPanel();
+		pane.addTab("IO", null, ioPanel, "Save and load images and preset files");
 
 	}
 	

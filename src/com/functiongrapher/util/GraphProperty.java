@@ -7,6 +7,8 @@ public enum GraphProperty {
 	WINDOW_YMIN,
 	WINDOW_YMAX,
 	WINDOW_GRID_STEPX,
-	WINDOW_GRID_STEPY;
+	WINDOW_GRID_STEPY,
+	
+	FUNCTION;
 	
 }
