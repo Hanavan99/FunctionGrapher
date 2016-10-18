@@ -1,8 +1,10 @@
 package com.functiongrapher.ui;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 public class WindowManager {
 
@@ -18,7 +20,17 @@ public class WindowManager {
 		} catch (Exception e) {
 
 		}
-		ss.setVisible(false);
+		Thread checker = new Thread(() -> {
+			while (GraphWindow.isWindowVisible() == false) {
+				try {
+					Thread.sleep(100);
+				} catch (Exception e) {
+					
+				}
+			}
+			ss.setVisible(false);
+		});
+		checker.start();
 	}
 
 	public static void addWindow(JFrame window, String name) {

@@ -1,5 +1,6 @@
 package com.functiongrapher.main;
 
+import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.ui.GraphWindow;
 import com.functiongrapher.ui.VarsWindow;
 import com.functiongrapher.ui.WindowManager;
@@ -8,6 +9,8 @@ import com.functiongrapher.ui.gfx.GraphicsController;
 public class Main {
 	
 	public static void main(String[] args) {
+		
+		ProgramLogger.LOGGER.info("Starting program");
 		
 		WindowManager.showSplashScreen(3000);
 		WindowManager.addWindow(new VarsWindow(), "vars");
@@ -23,9 +26,7 @@ public class Main {
 			GraphicsController.shutdown();
 		});
 		graphwindowthread.start();
-		
-		
-		
+			
 	}
 
 }
