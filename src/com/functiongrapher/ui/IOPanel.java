@@ -1,10 +1,10 @@
 package com.functiongrapher.ui;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import com.functiongrapher.function.FunctionManager;
@@ -25,19 +25,27 @@ public class IOPanel extends JPanel {
 		savePreset.setBounds(10, 10, 150, 20);
 		add(savePreset);
 		savePreset.addActionListener((ActionEvent e) -> {
-			File f = new File("C:/Users/kuhnhan000/Desktop/test.gdb");
+			JFileChooser chooser = new JFileChooser();
+			if (chooser.showSaveDialog(this) == JFileChooser.CANCEL_OPTION) return;
 			HashMap<GraphProperty, Object> properties = new HashMap<GraphProperty, Object>();
 			properties.put(GraphProperty.WINDOW_XMIN, FunctionManager.getXmin());
-			PresetFileIO.savePresetToFile(f, properties);
+			properties.put(GraphProperty.WINDOW_XMAX, FunctionManager.getXmax());
+			properties.put(GraphProperty.WINDOW_YMIN, FunctionManager.getYmin());
+			properties.put(GraphProperty.WINDOW_YMAX, FunctionManager.getYmax());
+			PresetFileIO.savePresetToFile(chooser.getSelectedFile(), properties);
 		});
 		
 		loadPreset = new JButton("Load Preset File");
-		loadPreset.setBounds(10, 10, 150, 20);
+		loadPreset.setBounds(10, 40, 150, 20);
 		add(loadPreset);
 		loadPreset.addActionListener((ActionEvent e) -> {
-			File f = new File("C:/Users/kuhnhan000/Desktop/test.gdb");
-			HashMap<GraphProperty, Object> properties = PresetFileIO.loadPresetFromFile(f);
-			FunctionManager.setXmin((double) properties.get(GraphProperty.WINDOW_XMIN)); 
+			JFileChooser chooser = new JFileChooser();
+			if (chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) return;
+			HashMap<GraphProperty, Object> properties = PresetFileIO.loadPresetFromFile(chooser.getSelectedFile());
+			FunctionManager.setXmin(Double.valueOf(properties.get(GraphProperty.WINDOW_XMIN).toString()));
+			FunctionManager.setXmax(Double.valueOf(properties.get(GraphProperty.WINDOW_XMAX).toString()));
+			FunctionManager.setYmin(Double.valueOf(properties.get(GraphProperty.WINDOW_YMIN).toString()));
+			FunctionManager.setYmax(Double.valueOf(properties.get(GraphProperty.WINDOW_YMAX).toString()));
 		});
 		
 	}

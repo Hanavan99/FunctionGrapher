@@ -17,8 +17,10 @@ public class PresetFileIO {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				String[] data = line.split("=");
+				properties.put(GraphProperty.valueOf(data[0]), (Object) data[1]);
 				
 			}
+			reader.close();
 			return properties;
 		} catch (Exception e) {
 			return null;
