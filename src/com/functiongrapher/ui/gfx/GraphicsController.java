@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
+import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.GraphWindow;
 import com.functiongrapher.ui.WindowManager;
@@ -35,6 +36,7 @@ public class GraphicsController {
 	}
 	
 	public static void initGLFW() {
+		ProgramLogger.setSplashScreenSubtext("Initializing GLFW...");
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (GLFW.glfwInit() == false) {
@@ -70,6 +72,7 @@ public class GraphicsController {
 	}
 
 	public static void attachCallbacks() {
+		ProgramLogger.setSplashScreenSubtext("Attaching Callbacks...");
 		GLFW.glfwSetKeyCallback(window, keycb = GLFWKeyCallback.create((window, key, scancode, action, mods) -> {
 			GraphWindow.keyStateChanged(key, action);
 		}));
@@ -84,6 +87,7 @@ public class GraphicsController {
 	}
 
 	public static void initGL() {
+		ProgramLogger.setSplashScreenSubtext("Initializing OpenGL...");
 		GL.createCapabilities();
 		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		GL11.glClearDepth(1.0f);

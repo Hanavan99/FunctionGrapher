@@ -248,7 +248,7 @@ public class GraphWindow {
 		if (flag) {
 			GLFW.glfwSetWindowMonitor(window, GLFW.glfwGetPrimaryMonitor(), 0, 0, 1920, 1080, (int) MemoryUtil.NULL);
 		} else {
-			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 100, 100, 640, 480, (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, 50, 50, 500, 500, (int) MemoryUtil.NULL);
 		}
 	}
 

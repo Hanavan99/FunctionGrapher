@@ -18,6 +18,8 @@ public class SplashScreen extends JFrame {
 	private static final int width = 400;
 	private static final int height = 250;
 	
+	private String subtext = "";
+	
 	public SplashScreen() {
 		int xpos = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - (width / 2);
 		int ypos = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - (height / 2);
@@ -38,7 +40,13 @@ public class SplashScreen extends JFrame {
 		g2d.drawString(ProgramInfo.PROGRAM_NAME, width - 250, height - 120);
 		g2d.setFont(new Font("Arial", Font.PLAIN, 14));
 		g2d.drawString(ProgramInfo.PROGRAM_VERSION, width - 250, height - 100);
+		g2d.drawString(subtext, width - 250, height - 80);
 		g2d.drawString(ProgramInfo.COPYRIGHT_INFO, width - 250, height - 10);
+	}
+	
+	public void setSubtext(String subtext) {
+		this.subtext = subtext;
+		repaint();
 	}
 	
 	

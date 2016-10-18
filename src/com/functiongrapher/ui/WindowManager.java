@@ -1,20 +1,17 @@
 package com.functiongrapher.ui;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
 public class WindowManager {
 
 	private static ArrayList<JFrame> windows = new ArrayList<JFrame>();
 	private static ArrayList<String> windownames = new ArrayList<String>();
 
-	public static void showSplashScreen(int idletime) {
+	public static void showSplashScreen(int idletime, int posttime) {
 		SplashScreen ss = new SplashScreen();
-		windows.add(ss);
-		windownames.add("splashscreen");
+		addWindow(ss, "splashscreen");
 		try {
 			Thread.sleep(idletime);
 		} catch (Exception e) {
@@ -28,6 +25,11 @@ public class WindowManager {
 					
 				}
 			}
+			try {
+				Thread.sleep(posttime);
+			} catch (Exception e) {
+
+			}
 			ss.setVisible(false);
 		});
 		checker.start();
@@ -38,6 +40,10 @@ public class WindowManager {
 			windows.add(window);
 			windownames.add(name);
 		}
+	}
+	
+	public static JFrame getWindow(String name) {
+		return windows.get(windownames.indexOf(name));
 	}
 	
 	public static void setWindowVisibility(String name, boolean flag) {

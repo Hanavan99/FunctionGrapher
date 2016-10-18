@@ -12,7 +12,8 @@ public class Main {
 		
 		ProgramLogger.LOGGER.info("Starting program");
 		
-		WindowManager.showSplashScreen(3000);
+		WindowManager.showSplashScreen(3000, 200);
+		ProgramLogger.setSplashScreenSubtext("Opening vars window...");
 		WindowManager.addWindow(new VarsWindow(), "vars");
 
 		// TODO remember the FPS timer...
