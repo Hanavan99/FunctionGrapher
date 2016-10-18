@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
-import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 

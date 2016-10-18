@@ -1,6 +1,5 @@
 package com.functiongrapher.ui;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -28,8 +27,8 @@ public class WindowPanel extends JPanel {
 	private JSpinner sGridStepX2D;
 	private JSpinner sGridStepY2D;
 	
-	private JComboBox<String> dDelta2D;
-	private JComboBox<String> dDelta3D;
+	//private JComboBox<String> dDelta2D;
+	//private JComboBox<String> dDelta3D;
 	
 	public WindowPanel() {
 		setLayout(null);
