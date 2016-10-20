@@ -5,12 +5,15 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
+import javax.swing.JOptionPane;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 
@@ -38,7 +41,7 @@ public class GraphWindow {
 
 	private static int mousex;
 	private static int mousey;
-	
+
 	private static int windowx;
 	private static int windowy;
 	private static int windowwidth;
@@ -62,55 +65,65 @@ public class GraphWindow {
 	public static void keyStateChanged(int key, int action) {
 		if (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT) {
 			switch (key) {
-				case GLFW.GLFW_KEY_A :
-					cameraxpos++;
-					break;
-				case GLFW.GLFW_KEY_D :
-					cameraxpos--;
-					break;
-				case GLFW.GLFW_KEY_S :
-					cameraypos++;
-					break;
-				case GLFW.GLFW_KEY_W :
-					cameraypos--;
-					break;
-				case GLFW.GLFW_KEY_LEFT :
-					camerayaw -= 3;
-					break;
-				case GLFW.GLFW_KEY_RIGHT :
-					camerayaw += 3;
-					break;
-				case GLFW.GLFW_KEY_DOWN :
-					camerapitch -= 3;
-					break;
-				case GLFW.GLFW_KEY_UP :
-					camerapitch += 3;
-					break;
-				case GLFW.GLFW_KEY_RIGHT_BRACKET :
-					if (camerazoom >= 5) {
-						camerazoom /= 1.2;
-					}
-					if (camerazoom < 5) {
-						camerazoom = 5;
-					}
-					break;
-				case GLFW.GLFW_KEY_LEFT_BRACKET :
-					if (camerazoom <= 300) {
-						camerazoom *= 1.2;
-					}
-					if (camerazoom > 300) {
-						camerazoom = 300;
-					}
-					break;
-				case GLFW.GLFW_KEY_F7 :
-					WindowManager.setWindowVisibility("vars", true);
-					break;
-				case GLFW.GLFW_KEY_F11 :
-					isfullscreen = !isfullscreen;
-					setIsFullscreen(isfullscreen);
-					break;
+			case GLFW.GLFW_KEY_A:
+				cameraxpos++;
+				break;
+			case GLFW.GLFW_KEY_D:
+				cameraxpos--;
+				break;
+			case GLFW.GLFW_KEY_S:
+				cameraypos++;
+				break;
+			case GLFW.GLFW_KEY_W:
+				cameraypos--;
+				break;
+			case GLFW.GLFW_KEY_LEFT:
+				camerayaw -= 3;
+				break;
+			case GLFW.GLFW_KEY_RIGHT:
+				camerayaw += 3;
+				break;
+			case GLFW.GLFW_KEY_DOWN:
+				camerapitch -= 3;
+				break;
+			case GLFW.GLFW_KEY_UP:
+				camerapitch += 3;
+				break;
+			case GLFW.GLFW_KEY_RIGHT_BRACKET:
+				if (camerazoom >= 5) {
+					camerazoom /= 1.2;
+				}
+				if (camerazoom < 5) {
+					camerazoom = 5;
+				}
+				break;
+			case GLFW.GLFW_KEY_LEFT_BRACKET:
+				if (camerazoom <= 300) {
+					camerazoom *= 1.2;
+				}
+				if (camerazoom > 300) {
+					camerazoom = 300;
+				}
+				break;
+			case GLFW.GLFW_KEY_F7:
+				WindowManager.setWindowVisibility("vars", true);
+				break;
+			case GLFW.GLFW_KEY_F11:
+				isfullscreen = !isfullscreen;
+				setIsFullscreen(isfullscreen);
+				break;
 			}
 		}
+	}
+
+	public static void windowClosing() {
+		GLFW.glfwSetWindowShouldClose(window, false);
+		Thread closeThread = new Thread(() -> {
+			if (JOptionPane.showConfirmDialog(WindowManager.getWindow("vars"), ProgramInfo.QUIT_MESSAGE) == JOptionPane.OK_OPTION) {
+				GLFW.glfwSetWindowShouldClose(window, true);
+			}
+		});
+		closeThread.start();
 	}
 
 	public static void setIs3D(boolean is3D) {
@@ -251,7 +264,8 @@ public class GraphWindow {
 
 	public static void setIsFullscreen(boolean flag) {
 		if (flag) {
-			int[] xpos = new int[1]; int[] ypos = new int[1];
+			int[] xpos = new int[1];
+			int[] ypos = new int[1];
 			GLFW.glfwGetWindowPos(window, xpos, ypos);
 			windowx = xpos[0];
 			windowy = ypos[0];
@@ -259,7 +273,8 @@ public class GraphWindow {
 			GLFW.glfwGetWindowSize(window, width, height);
 			windowwidth = width[0];
 			windowheight = height[0];
-			GLFW.glfwSetWindowMonitor(window, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedMonitor(), 0, 0, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getWidth(), ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getHeight(), (int) MemoryUtil.NULL);
+			GLFW.glfwSetWindowMonitor(window, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedMonitor(), 0, 0, ((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getWidth(),
+					((VarsWindow) WindowManager.getWindow("vars")).getSelectedResolution().getHeight(), (int) MemoryUtil.NULL);
 		} else {
 			GLFW.glfwSetWindowMonitor(window, MemoryUtil.NULL, windowx, windowy, windowwidth, windowheight, (int) MemoryUtil.NULL);
 		}

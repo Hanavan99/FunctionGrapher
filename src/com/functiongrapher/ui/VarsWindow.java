@@ -23,7 +23,7 @@ public class VarsWindow extends JFrame {
 	private IOPanel ioPanel;
 	
 	public VarsWindow() {
-		setTitle("Vars");
+		setTitle(ProgramInfo.WINDOW_VARS_NAME);
 		setBounds(100, 100, 500, 500);
 		setResizable(false);
 		setVisible(true);

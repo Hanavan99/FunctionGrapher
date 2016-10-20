@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFWImage.Buffer;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
+import org.lwjgl.glfw.GLFWWindowCloseCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
@@ -32,6 +33,7 @@ public class GraphicsController {
 	private static GLFWKeyCallback keycb;
 	private static GLFWMouseButtonCallback mousecb;
 	private static GLFWScrollCallback scrollcb;
+	private static GLFWWindowCloseCallback windowcb;
 
 	public static long getWindowID() {
 		return window;
@@ -62,7 +64,7 @@ public class GraphicsController {
 			ProgramLogger.LOGGER.warning("Could not set window icon!");
 			e.printStackTrace();
 		}
-
+		
 		window = GLFW.glfwCreateWindow(640, 480, ProgramInfo.PROGRAM_NAME, MemoryUtil.NULL, MemoryUtil.NULL);
 		if (window == MemoryUtil.NULL) {
 			throw new IllegalStateException("Window creation failed");
@@ -71,7 +73,7 @@ public class GraphicsController {
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(window);
-		
+
 		PointerBuffer b = GLFW.glfwGetMonitors();
 		long[] monitors = new long[b.capacity()];
 		for (int i = 0; i < b.capacity(); i++) {
@@ -82,17 +84,12 @@ public class GraphicsController {
 
 	public static void attachCallbacks() {
 		ProgramLogger.setSplashScreenSubtext("Attaching Callbacks...");
-		GLFW.glfwSetKeyCallback(window, keycb = GLFWKeyCallback.create((window, key, scancode, action, mods) -> {
-			GraphWindow.keyStateChanged(key, action);
-		}));
-
+		GLFW.glfwSetKeyCallback(window, keycb = GLFWKeyCallback.create((window, key, scancode, action, mods) -> GraphWindow.keyStateChanged(key, action)));
 		GLFW.glfwSetMouseButtonCallback(window, mousecb = GLFWMouseButtonCallback.create((window, button, action, mods) -> {
 
 		}));
-
-		GLFW.glfwSetScrollCallback(window, scrollcb = GLFWScrollCallback.create((window, xoffset, yoffset) -> {
-			GraphWindow.mouseScrolled(yoffset);
-		}));
+		GLFW.glfwSetScrollCallback(window, scrollcb = GLFWScrollCallback.create((window, xoffset, yoffset) -> GraphWindow.mouseScrolled(yoffset)));
+		GLFW.glfwSetWindowCloseCallback(window, windowcb = GLFWWindowCloseCallback.create((window) -> GraphWindow.windowClosing()));
 	}
 
 	public static void initGL() {
@@ -113,6 +110,7 @@ public class GraphicsController {
 		keycb.free();
 		mousecb.free();
 		scrollcb.free();
+		windowcb.free();
 		WindowManager.killWindows();
 		GLFW.glfwTerminate();
 	}

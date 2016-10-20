@@ -11,6 +11,11 @@ public class ProgramInfo {
 	public static final String ICON32_PATH = "/assets/images/fgicon32.png";
 	public static final String ICON64_PATH = "/assets/images/fgicon64.png";
 	
+	public static final String WINDOW_VARS_NAME = "Vars";
+	public static final String WINDOW_VARS_NAME_INTERNAL = "vars";
+	
+	public static final String QUIT_MESSAGE = "Are you sure you want to quit?";
+	
 	public static final int GRAPHWINDOW_WIDTH = 500;
 	public static final int GRAPHWINDOW_HEIGHT = 500;
 	

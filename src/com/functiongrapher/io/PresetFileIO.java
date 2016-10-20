@@ -36,7 +36,6 @@ public class PresetFileIO {
 			}
 			writer.close();
 		} catch (Exception e) {
-
 		}
 	}
 
