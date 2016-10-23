@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.EquationEditor;
 
 public class EquationPanel extends JPanel {
@@ -49,7 +50,7 @@ public class EquationPanel extends JPanel {
 		add(listScroller);
 
 		addEquation = new JButton("Add");
-		addEquation.setBounds(10, 410, 70, 20);
+		addEquation.setBounds(10, 410, 70, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(addEquation);
 		addEquation.addActionListener((ActionEvent e) -> {
 			EquationEditor ee = new EquationEditor("New Equation");
@@ -71,18 +72,16 @@ public class EquationPanel extends JPanel {
 				}
 			});
 			FunctionManager.addFunction(ee);
-			updateList();
 		});
 
 		delEquation = new JButton("Delete");
-		delEquation.setBounds(89, 410, 70, 20);
+		delEquation.setBounds(89, 410, 70, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(delEquation);
 		delEquation.addActionListener((ActionEvent e) -> {
 			if (equationList.getSelectedValue() == null) {
 				return;
 			}
 			FunctionManager.removeFunction(equationList.getSelectedValue());
-			updateList();
 			EquationPanel.this.repaint();
 		});
 
@@ -92,12 +91,30 @@ public class EquationPanel extends JPanel {
 		for (Component c : getComponents()) {
 			if (c instanceof EquationEditor) {
 				remove(c);
+				((EquationEditor) c).removeRenameListener();
 			}
 		}
 		elist.clear();
 		
 		for (EquationEditor ee : FunctionManager.getFunctions()) {
 			elist.addElement(ee);
+			ee.setVisible(false);
+			ee.setBounds(170, 10, 300, 440);
+			ee.setRenameListener(new DocumentListener() {
+				@Override
+				public void changedUpdate(DocumentEvent arg0) {
+				}
+
+				@Override
+				public void insertUpdate(DocumentEvent arg0) {
+					equationList.repaint();
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent arg0) {
+					equationList.repaint();
+				}
+			});
 			add(ee);
 		}
 	}

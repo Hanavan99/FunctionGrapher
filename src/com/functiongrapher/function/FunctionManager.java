@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.EquationEditor;
+import com.functiongrapher.ui.panels.EquationPanel;
 import com.functiongrapher.ui.windows.VarsWindow;
 import com.functiongrapher.ui.windows.WindowManager;
 
@@ -25,15 +26,26 @@ public class FunctionManager {
 
 	public static void addFunction(EquationEditor ee) {
 		functions.add(ee);
-		((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
+		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
+		panel.add(ee);
+		panel.updateList();
+
 	}
 
 	public static void removeFunction(EquationEditor ee) {
 		functions.remove(ee);
+		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
+		panel.remove(ee);
+		panel.updateList();
 	}
-	
+
 	public static ArrayList<EquationEditor> getFunctions() {
 		return functions;
+	}
+
+	public static void clearFunctions() {
+		functions.clear();
+		((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel().updateList();
 	}
 
 	public static double getXmin() {

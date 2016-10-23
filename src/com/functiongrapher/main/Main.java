@@ -1,5 +1,7 @@
 package com.functiongrapher.main;
 
+import javax.swing.UIManager;
+
 import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.windows.GraphWindow;
@@ -12,6 +14,12 @@ public class Main {
 
 		if (System.getProperty("os.name").equals("linux")) {
 			System.setProperty("org.lwjgl.librarypath", ".");
+		}
+
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+
 		}
 
 		ProgramLogger.init();

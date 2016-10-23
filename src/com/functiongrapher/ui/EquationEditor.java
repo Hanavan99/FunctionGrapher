@@ -20,6 +20,7 @@ import javax.swing.event.DocumentListener;
 
 import com.functiongrapher.function.Function;
 import com.functiongrapher.logging.ProgramLogger;
+import com.functiongrapher.main.ProgramInfo;
 
 public class EquationEditor extends JPanel {
 
@@ -38,6 +39,7 @@ public class EquationEditor extends JPanel {
 	private Color equationColor = Color.BLACK;
 	private Function function;
 	private ScriptEngine engine;
+	private DocumentListener dl;
 
 	public EquationEditor(String defaultName) {
 		setLayout(null);
@@ -76,15 +78,15 @@ public class EquationEditor extends JPanel {
 		};
 
 		nameLabel = new JLabel("Name:");
-		nameLabel.setBounds(10, 10, 50, 20);
+		nameLabel.setBounds(10, 10, 50, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(nameLabel);
 
 		nameText = new JTextField(defaultName);
-		nameText.setBounds(60, 10, 240, 20);
+		nameText.setBounds(60, 10, 240, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(nameText);
 
 		editColor = new JButton("Change Color...");
-		editColor.setBounds(10, 40, 125, 20);
+		editColor.setBounds(10, 40, 125, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(editColor);
 		editColor.addActionListener((ActionEvent e) -> {
 			equationColor = JColorChooser.showDialog(this, "Graph Color", equationColor);
@@ -94,14 +96,14 @@ public class EquationEditor extends JPanel {
 		});
 
 		equationLabel = new JLabel("Mode:");
-		equationLabel.setBounds(145, 40, 35, 20);
+		equationLabel.setBounds(145, 40, 35, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 
 		equationType = new JComboBox<String>(new String[] { "Single Statement (Simple)", "Function (Advanced)", "Empty (Insane)" });
-		equationType.setBounds(145, 40, 154, 20);
+		equationType.setBounds(145, 40, 154, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(equationType);
 
 		bodyLabel = new JLabel("Equation: f(x, y, t)=");
-		bodyLabel.setBounds(10, 70, 150, 20);
+		bodyLabel.setBounds(10, 70, 150, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(bodyLabel);
 
 		bodyText = new JTextArea("0");
@@ -125,7 +127,7 @@ public class EquationEditor extends JPanel {
 		add(bodyScroller);
 		
 		evalColor = new JCheckBox("Evaluate color with getColor() method");
-		evalColor.setBounds(10, 400, 300, 20);
+		evalColor.setBounds(10, 400, 300, ProgramInfo.DEFAULTCOMPONENTHEIGHT);
 		add(evalColor);
 	}
 
@@ -148,17 +150,35 @@ public class EquationEditor extends JPanel {
 	}
 
 	public void setRenameListener(DocumentListener l) {
+		dl = l;
 		nameText.getDocument().addDocumentListener(l);
 	}
 	
+	public void removeRenameListener() {
+		nameText.getDocument().removeDocumentListener(dl);
+	}
+	
 	public String getSaveData() {
-		return toString() + "$" + equationColor.toString() + "$" + bodyText.getText().replaceAll("\r", "\\r").replaceAll("\n", "\\n");
+		String colorname = String.valueOf(equationColor.getRed()) + "$" + String.valueOf(equationColor.getGreen()) + "$" + String.valueOf(equationColor.getBlue());
+		return toString() + "$" + String.valueOf(equationType.getSelectedIndex()) + "$" + colorname + "$" + bodyText.getText().replace("\r", "%return%").replace("\n", "%newline%");
+	}
+	
+	public void setEquationText(String text) {
+		bodyText.setText(text);
+	}
+	
+	public void setEquationType(int index) {
+		equationType.setSelectedIndex(index);
+	}
+	
+	public void setEquationColor(Color c) {
+		equationColor = c;
 	}
 
 	@Override
 	public String toString() {
 		if (!nameText.getText().equals("")) {
-			return nameText.getText();
+			return nameText.getText().replace("$", "").replace("#", "");
 		}
 		return "Unnamed Equation";
 	}

@@ -11,6 +11,8 @@ public class ProgramInfo {
 	public static final String ICON32_PATH = "/assets/images/fgicon32.png";
 	public static final String ICON64_PATH = "/assets/images/fgicon64.png";
 	
+	public static final int DEFAULTCOMPONENTHEIGHT = 24;
+	
 	public static final String WINDOW_VARS_NAME = "Vars";
 	public static final String WINDOW_VARS_NAME_INTERNAL = "vars";
 	
