@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +8,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import com.functiongrapher.ui.windows.GraphWindow;
 
 public class ViewPanel extends JPanel {
 

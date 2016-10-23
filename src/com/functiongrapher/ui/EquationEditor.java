@@ -19,6 +19,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.functiongrapher.function.Function;
+import com.functiongrapher.logging.ProgramLogger;
 
 public class EquationEditor extends JPanel {
 
@@ -138,6 +139,7 @@ public class EquationEditor extends JPanel {
 				engine.eval(bodyText.getText());
 			}
 		} catch (javax.script.ScriptException e) {
+			ProgramLogger.fine(e.toString());
 		}
 	}
 

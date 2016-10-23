@@ -1,8 +1,10 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.windows;
 
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+
+import com.functiongrapher.logging.ProgramLogger;
 
 public class WindowManager {
 
@@ -15,20 +17,20 @@ public class WindowManager {
 		try {
 			Thread.sleep(idletime);
 		} catch (Exception e) {
-
+			ProgramLogger.warning(e.toString());
 		}
 		Thread checker = new Thread(() -> {
 			while (GraphWindow.isWindowVisible() == false) {
 				try {
 					Thread.sleep(100);
 				} catch (Exception e) {
-					
+					ProgramLogger.warning(e.toString());
 				}
 			}
 			try {
 				Thread.sleep(posttime);
 			} catch (Exception e) {
-
+				ProgramLogger.warning(e.toString());
 			}
 			ss.setVisible(false);
 		});

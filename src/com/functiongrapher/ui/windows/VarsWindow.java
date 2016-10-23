@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.windows;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -8,6 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.ui.panels.EquationPanel;
+import com.functiongrapher.ui.panels.GraphicsPanel;
+import com.functiongrapher.ui.panels.IOPanel;
+import com.functiongrapher.ui.panels.MainPanel;
+import com.functiongrapher.ui.panels.ViewPanel;
+import com.functiongrapher.ui.panels.WindowPanel;
 import com.functiongrapher.util.ScreenResolution;
 
 public class VarsWindow extends JFrame {

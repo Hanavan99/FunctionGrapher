@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.windows;
 
 import java.awt.Color;
 import java.awt.Font;

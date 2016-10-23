@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.panels;
 
 import java.awt.event.ActionEvent;
 import java.util.HashMap;

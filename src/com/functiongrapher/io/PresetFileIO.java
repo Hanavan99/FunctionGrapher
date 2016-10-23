@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.util.GraphProperty;
 
 public class PresetFileIO {
@@ -23,6 +24,7 @@ public class PresetFileIO {
 			reader.close();
 			return properties;
 		} catch (Exception e) {
+			ProgramLogger.warning(e.toString());
 			return null;
 		}
 		
@@ -36,6 +38,7 @@ public class PresetFileIO {
 			}
 			writer.close();
 		} catch (Exception e) {
+			ProgramLogger.warning(e.toString());
 		}
 	}
 

@@ -1,11 +1,9 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.windows;
 
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
-import javax.swing.JOptionPane;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -13,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
-import com.functiongrapher.main.ProgramInfo;
 
 public class GraphWindow {
 
@@ -119,7 +116,7 @@ public class GraphWindow {
 	public static void windowClosing() {
 		GLFW.glfwSetWindowShouldClose(window, false);
 		Thread closeThread = new Thread(() -> {
-			if (JOptionPane.showConfirmDialog(WindowManager.getWindow("vars"), ProgramInfo.QUIT_MESSAGE) == JOptionPane.OK_OPTION) {
+			if (true) {
 				GLFW.glfwSetWindowShouldClose(window, true);
 			}
 		});

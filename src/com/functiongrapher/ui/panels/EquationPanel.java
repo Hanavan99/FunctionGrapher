@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.panels;
 
 import java.awt.event.ActionEvent;
 
@@ -13,6 +13,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.ui.EquationEditor;
 
 public class EquationPanel extends JPanel {
 

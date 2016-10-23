@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.panels;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

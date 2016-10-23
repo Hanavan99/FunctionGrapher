@@ -22,9 +22,9 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
-import com.functiongrapher.ui.GraphWindow;
-import com.functiongrapher.ui.VarsWindow;
-import com.functiongrapher.ui.WindowManager;
+import com.functiongrapher.ui.windows.GraphWindow;
+import com.functiongrapher.ui.windows.VarsWindow;
+import com.functiongrapher.ui.windows.WindowManager;
 
 public class GraphicsController {
 
@@ -61,7 +61,7 @@ public class GraphicsController {
 			Buffer img = new Buffer(buf);
 			GLFW.glfwSetWindowIcon(window, img);
 		} catch (Exception e) {
-			ProgramLogger.LOGGER.warning("Could not set window icon!");
+			ProgramLogger.warning("Could not set window icon!");
 			e.printStackTrace();
 		}
 		

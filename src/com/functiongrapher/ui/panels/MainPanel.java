@@ -1,4 +1,4 @@
-package com.functiongrapher.ui;
+package com.functiongrapher.ui.panels;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -6,6 +6,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import com.functiongrapher.ui.windows.GraphWindow;
 
 public class MainPanel extends JPanel {
 
