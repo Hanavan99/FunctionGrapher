@@ -5,9 +5,14 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.ui.EquationEditor;
+import com.functiongrapher.ui.windows.VarsWindow;
+import com.functiongrapher.ui.windows.WindowManager;
+
 public class FunctionManager {
 
-	private static ArrayList<Function> functions = new ArrayList<Function>();
+	private static ArrayList<EquationEditor> functions = new ArrayList<EquationEditor>();
 
 	private static double xmin = -10.0d;
 	private static double xmax = 10.0d;
@@ -18,12 +23,17 @@ public class FunctionManager {
 	private static double gridStepX2D = 1.0d;
 	private static double gridStepY2D = 1.0d;
 
-	public static void addFunction(Function f) {
-		functions.add(f);
+	public static void addFunction(EquationEditor ee) {
+		functions.add(ee);
+		((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
 	}
 
-	public static void removeFunction(Function f) {
-		functions.remove(f);
+	public static void removeFunction(EquationEditor ee) {
+		functions.remove(ee);
+	}
+	
+	public static ArrayList<EquationEditor> getFunctions() {
+		return functions;
 	}
 
 	public static double getXmin() {
@@ -120,9 +130,10 @@ public class FunctionManager {
 
 		if (is3D) {
 			GL11.glLineWidth(2f);
-			Function[] funcs = new Function[0];
+			EquationEditor[] funcs = new EquationEditor[0];
 			funcs = functions.toArray(funcs);
-			for (Function f : funcs) {
+			for (EquationEditor ee : funcs) {
+				Function f = ee.getFunction();
 				GL11.glBegin(GL11.GL_LINES);
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x <= xmax; x += delta3D) {
@@ -172,9 +183,10 @@ public class FunctionManager {
 			}
 		} else {
 			GL11.glLineWidth(3f);
-			Function[] funcs = new Function[0];
+			EquationEditor[] funcs = new EquationEditor[0];
 			funcs = functions.toArray(funcs);
-			for (Function f : funcs) {
+			for (EquationEditor ee : funcs) {
+				Function f = ee.getFunction();
 				GL11.glBegin(GL11.GL_LINES);
 				GL11.glColor3dv(f.getGraphColor());
 				for (double x = xmin; x <= xmax; x += delta2D) {

@@ -81,4 +81,8 @@ public class VarsWindow extends JFrame {
 		return graphicsPanel.getSelectedResolution();
 	}
 	
+	public EquationPanel getEquationPanel() {
+		return equationPanel;
+	}
+	
 }

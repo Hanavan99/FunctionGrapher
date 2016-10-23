@@ -17,7 +17,7 @@ public class PresetFileIO {
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				String[] data = line.split("=");
+				String[] data = line.split("=", 2);
 				properties.put(GraphProperty.valueOf(data[0]), (Object) data[1]);
 				
 			}

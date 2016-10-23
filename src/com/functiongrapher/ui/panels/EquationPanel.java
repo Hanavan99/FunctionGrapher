@@ -1,5 +1,6 @@
 package com.functiongrapher.ui.panels;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.DefaultListModel;
@@ -54,7 +55,6 @@ public class EquationPanel extends JPanel {
 			EquationEditor ee = new EquationEditor("New Equation");
 			ee.setVisible(false);
 			ee.setBounds(170, 10, 300, 440);
-			elist.addElement(ee);
 			ee.setRenameListener(new DocumentListener() {
 				@Override
 				public void changedUpdate(DocumentEvent arg0) {
@@ -70,8 +70,8 @@ public class EquationPanel extends JPanel {
 					equationList.repaint();
 				}
 			});
-			EquationPanel.this.add(ee);
-			FunctionManager.addFunction(ee.getFunction());
+			FunctionManager.addFunction(ee);
+			updateList();
 		});
 
 		delEquation = new JButton("Delete");
@@ -81,13 +81,25 @@ public class EquationPanel extends JPanel {
 			if (equationList.getSelectedValue() == null) {
 				return;
 			}
-			EquationEditor ee = equationList.getSelectedValue();
-			FunctionManager.removeFunction(ee.getFunction());
-			elist.removeElement(ee);
-			EquationPanel.this.remove(ee);
+			FunctionManager.removeFunction(equationList.getSelectedValue());
+			updateList();
 			EquationPanel.this.repaint();
 		});
 
+	}
+	
+	public void updateList() {
+		for (Component c : getComponents()) {
+			if (c instanceof EquationEditor) {
+				remove(c);
+			}
+		}
+		elist.clear();
+		
+		for (EquationEditor ee : FunctionManager.getFunctions()) {
+			elist.addElement(ee);
+			add(ee);
+		}
 	}
 
 }

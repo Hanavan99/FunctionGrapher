@@ -10,6 +10,10 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		if (System.getProperty("os.name").equals("linux")) {
+			System.setProperty("org.lwjgl.librarypath", ".");
+		}
+
 		ProgramLogger.init();
 		ProgramLogger.info("Starting program...");
 		WindowManager.showSplashScreen(3000, 1000);

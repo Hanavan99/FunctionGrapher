@@ -32,6 +32,7 @@ public class IOPanel extends JPanel {
 			properties.put(GraphProperty.WINDOW_XMAX, FunctionManager.getXmax());
 			properties.put(GraphProperty.WINDOW_YMIN, FunctionManager.getYmin());
 			properties.put(GraphProperty.WINDOW_YMAX, FunctionManager.getYmax());
+			//for (EquationPanel.)
 			PresetFileIO.savePresetToFile(chooser.getSelectedFile(), properties);
 		});
 		

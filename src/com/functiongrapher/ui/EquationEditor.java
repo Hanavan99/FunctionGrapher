@@ -150,6 +150,10 @@ public class EquationEditor extends JPanel {
 	public void setRenameListener(DocumentListener l) {
 		nameText.getDocument().addDocumentListener(l);
 	}
+	
+	public String getSaveData() {
+		return toString() + "$" + equationColor.toString() + "$" + bodyText.getText().replaceAll("\r", "\\r").replaceAll("\n", "\\n");
+	}
 
 	@Override
 	public String toString() {
