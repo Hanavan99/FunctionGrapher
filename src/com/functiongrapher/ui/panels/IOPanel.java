@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.io.PresetFileIO;
@@ -34,6 +35,10 @@ public class IOPanel extends JPanel {
 		add(savePreset);
 		savePreset.addActionListener((ActionEvent e) -> {
 			JFileChooser chooser = new JFileChooser();
+			chooser.setAcceptAllFileFilterUsed(false);
+			for (FileFilter f : ProgramInfo.PRESETFILE_FILTERS) {
+				chooser.addChoosableFileFilter(f);
+			}
 			if (chooser.showSaveDialog(this) == JFileChooser.CANCEL_OPTION)
 				return;
 			ArrayList<GraphParameter<?>> properties = new ArrayList<GraphParameter<?>>();
@@ -52,6 +57,10 @@ public class IOPanel extends JPanel {
 		add(loadPreset);
 		loadPreset.addActionListener((ActionEvent e) -> {
 			JFileChooser chooser = new JFileChooser();
+			chooser.setAcceptAllFileFilterUsed(false);
+			for (FileFilter f : ProgramInfo.PRESETFILE_FILTERS) {
+				chooser.addChoosableFileFilter(f);
+			}
 			if (chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
 				return;
 			ArrayList<GraphParameter<?>> properties = PresetFileIO.loadPresetFromFile(chooser.getSelectedFile());
@@ -90,6 +99,10 @@ public class IOPanel extends JPanel {
 		add(saveShot);
 		saveShot.addActionListener((ActionEvent e) -> {
 			JFileChooser chooser = new JFileChooser();
+			chooser.setAcceptAllFileFilterUsed(false);
+			for (FileFilter f : ProgramInfo.SCREENSHOT_FILTERS) {
+				chooser.addChoosableFileFilter(f);
+			}
 			if (chooser.showSaveDialog(this) == JFileChooser.CANCEL_OPTION)
 				return;
 			GraphWindow.takeScreenshot();

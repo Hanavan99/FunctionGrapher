@@ -105,6 +105,9 @@ public class GraphWindow {
 			case GLFW.GLFW_KEY_F7:
 				WindowManager.setWindowVisibility("vars", true);
 				break;
+			case GLFW.GLFW_KEY_F8:
+				WindowManager.setWindowVisibility("table", true);
+				break;
 			case GLFW.GLFW_KEY_F11:
 				isfullscreen = !isfullscreen;
 				setIsFullscreen(isfullscreen);
