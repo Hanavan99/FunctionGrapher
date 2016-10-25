@@ -13,9 +13,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		if (System.getProperty("os.name").equals("linux")) {
-			System.setProperty("org.lwjgl.librarypath", ".");
-		}
+		System.setProperty("org.lwjgl.librarypath", ".");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

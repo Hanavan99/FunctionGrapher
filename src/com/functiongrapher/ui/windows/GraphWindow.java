@@ -241,6 +241,14 @@ public class GraphWindow {
 	private static void createOrthographic(int width, int height, float xmin, float xmax, float ymin, float ymax) {
 		GL11.glOrtho(xmin, xmax, ymin, ymax, -1, 1);
 	}
+	
+	public static boolean getGraphMode() {
+		return is3D;
+	}
+	
+	public static void setGraphMode(boolean is3D) {
+		GraphWindow.is3D = is3D;
+	}
 
 	public static void setControlState(boolean controllable) {
 		controlslocked = !controllable;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
@@ -16,6 +17,8 @@ import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.EquationEditor;
 import com.functiongrapher.ui.windows.GraphWindow;
+import com.functiongrapher.ui.windows.VarsWindow;
+import com.functiongrapher.ui.windows.WindowManager;
 import com.functiongrapher.util.GraphParameter;
 import com.functiongrapher.util.GraphProperty;
 
@@ -46,10 +49,12 @@ public class IOPanel extends JPanel {
 			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_XMAX, FunctionManager.getXmax()));
 			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMIN, FunctionManager.getYmin()));
 			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMAX, FunctionManager.getYmax()));
+			properties.add(new GraphParameter<Boolean>(GraphProperty.VIEW_GRAPHMODE, GraphWindow.getGraphMode()));
 			for (EquationEditor ee : FunctionManager.getFunctions()) {
 				properties.add(new GraphParameter<String>(GraphProperty.FUNCTION, ee.getSaveData()));
 			}
 			PresetFileIO.savePresetToFile(chooser.getSelectedFile(), properties);
+			JOptionPane.showMessageDialog(this, "Preset file saved!");
 		});
 
 		loadPreset = new JButton("Load Preset File");
@@ -64,9 +69,16 @@ public class IOPanel extends JPanel {
 			if (chooser.showOpenDialog(this) == JFileChooser.CANCEL_OPTION)
 				return;
 			ArrayList<GraphParameter<?>> properties = PresetFileIO.loadPresetFromFile(chooser.getSelectedFile());
+			boolean ask = false;
 			for (GraphParameter<?> param : properties) {
 				switch (param.getType()) {
 				case FUNCTION:
+					if (ask == false) {
+						ask = true;
+						if (JOptionPane.showConfirmDialog(this, "It seems that there are some functions defined in the file. Would you like to delete the ones that are currently on the equation panel?") == JOptionPane.OK_OPTION) {
+							FunctionManager.clearFunctions();
+						}
+					}
 					String data = param.getData().toString();
 					String[] subdata = data.split("\\$", 6);
 					ProgramLogger.info(String.valueOf(subdata.length));
@@ -81,17 +93,25 @@ public class IOPanel extends JPanel {
 				case WINDOW_GRID_STEPY:
 					break;
 				case WINDOW_XMAX:
+					FunctionManager.setXmax(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_XMIN:
+					FunctionManager.setXmin(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_YMAX:
+					FunctionManager.setYmax(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_YMIN:
+					FunctionManager.setYmin(Double.valueOf(param.getData().toString()));
+					break;
+				case VIEW_GRAPHMODE:
+					((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getViewPanel().setGraphMode(Boolean.valueOf(param.getData().toString()));
 					break;
 				default:
 					break;
 				}
 			}
+			JOptionPane.showMessageDialog(this, "Preset file loaded!");
 		});
 
 		saveShot = new JButton("Take Screenshot");
@@ -112,7 +132,7 @@ public class IOPanel extends JPanel {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-
+			JOptionPane.showMessageDialog(this, "Graph image saved!");
 		});
 
 	}

@@ -85,4 +85,8 @@ public class VarsWindow extends JFrame {
 		return equationPanel;
 	}
 	
+	public ViewPanel getViewPanel() {
+		return viewPanel;
+	}
+	
 }

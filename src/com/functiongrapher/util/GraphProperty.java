@@ -9,6 +9,8 @@ public enum GraphProperty {
 	WINDOW_GRID_STEPX,
 	WINDOW_GRID_STEPY,
 	
+	VIEW_GRAPHMODE,
+	
 	FUNCTION;
 	
 }

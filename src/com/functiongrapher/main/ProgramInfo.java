@@ -52,7 +52,7 @@ public class ProgramInfo {
 
 		@Override
 		public String getDescription() {
-			return "Text Files (*.txt)";
+			return "Text File (*.txt)";
 		}
 	} };
 	public static final FileFilter[] SCREENSHOT_FILTERS = new FileFilter[] { new FileFilter() {

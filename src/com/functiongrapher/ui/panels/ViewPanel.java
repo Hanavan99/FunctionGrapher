@@ -59,5 +59,9 @@ public class ViewPanel extends JPanel {
 		graphicsMode.addActionListener((ActionEvent e) -> GraphWindow.setIs3D(graphicsMode.getSelectedIndex() == 1));
 
 	}
+	
+	public void setGraphMode(boolean graphMode) {
+		graphicsMode.setSelectedIndex(graphMode == true ? 1 : 0);
+	}
 
 }
