@@ -10,7 +10,7 @@ public class ProgramInfo {
 
 	public static final String PROGRAM_NAME = "FunctionGrapher";
 	public static final String PROGRAM_VERSION = "2.0.0 Beta v5";
-	public static final String COPYRIGHT_INFO = "Copyright ©2016. All rights reserved.";
+	public static final String COPYRIGHT_INFO = "Copyright \u00A92016. All rights reserved.";
 
 	public static final String ICON32_PATH = "/assets/images/fgicon32.png";
 	public static final String ICON64_PATH = "/assets/images/fgicon64.png";
