@@ -13,7 +13,6 @@ import javax.swing.filechooser.FileFilter;
 
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.io.PresetFileIO;
-import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.EquationEditor;
 import com.functiongrapher.ui.windows.GraphWindow;
@@ -81,7 +80,6 @@ public class IOPanel extends JPanel {
 					}
 					String data = param.getData().toString();
 					String[] subdata = data.split("\\$", 6);
-					ProgramLogger.info(String.valueOf(subdata.length));
 					EquationEditor ee = new EquationEditor(subdata[0]);
 					ee.setEquationType(Integer.valueOf(subdata[1]));
 					ee.setEquationColor(new Color(Integer.valueOf(subdata[2]), Integer.valueOf(subdata[3]), Integer.valueOf(subdata[4])));
