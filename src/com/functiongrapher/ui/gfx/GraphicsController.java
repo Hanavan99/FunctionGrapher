@@ -46,7 +46,8 @@ public class GraphicsController {
 		if (GLFW.glfwInit() == false) {
 			throw new IllegalStateException("GLFW init failed");
 		}
-
+		
+		
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 16);
 		GLFW.glfwWindowHint(GLFW.GLFW_AUTO_ICONIFY, GLFW.GLFW_FALSE);
 
