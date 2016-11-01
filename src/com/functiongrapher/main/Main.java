@@ -2,6 +2,8 @@ package com.functiongrapher.main;
 
 import javax.swing.UIManager;
 
+import com.functiongrapher.lang.LanguageManager;
+import com.functiongrapher.lang.LanguageManager.Language;
 import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.windows.GraphWindow;
@@ -21,9 +23,13 @@ public class Main {
 
 		}
 
+		LanguageManager.setLanguage(Language.EN_US);
 		ProgramLogger.init();
+
 		ProgramLogger.info("Starting program...");
 		WindowManager.showSplashScreen(3000, 1000);
+		ProgramLogger.setSplashScreenSubtext("Loading lang file...");
+		LanguageManager.loadLangFile();
 		ProgramLogger.setSplashScreenSubtext("Opening vars window...");
 		WindowManager.addWindow(new VarsWindow(), ProgramInfo.WINDOW_VARS_NAME_INTERNAL);
 		WindowManager.addWindow(new TableWindow(), ProgramInfo.WINDOW_TABLE_NAME_INTERNAL);

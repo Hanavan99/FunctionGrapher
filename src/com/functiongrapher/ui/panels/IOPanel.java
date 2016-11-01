@@ -74,7 +74,7 @@ public class IOPanel extends JPanel {
 				case FUNCTION:
 					if (ask == false) {
 						ask = true;
-						if (JOptionPane.showConfirmDialog(this, "It seems that there are some functions defined in the file. Would you like to delete the ones that are currently on the equation panel?") == JOptionPane.OK_OPTION) {
+						if (JOptionPane.showConfirmDialog(this, "It seems that there are some functions defined in this file. Would you like to delete the ones that are currently on the equation panel?") == JOptionPane.OK_OPTION) {
 							FunctionManager.clearFunctions();
 						}
 					}

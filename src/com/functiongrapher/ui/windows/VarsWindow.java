@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import com.functiongrapher.lang.LanguageManager;
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.ui.panels.EquationPanel;
 import com.functiongrapher.ui.panels.GraphicsPanel;
@@ -49,7 +50,7 @@ public class VarsWindow extends JFrame {
 		pane.addTab("General", null, mainPanel, "General settings for FunctionGrapher");
 
 		equationPanel = new EquationPanel();
-		pane.addTab("Equations", null, equationPanel, "Edit equations and equation options");
+		pane.addTab(LanguageManager.getField("ui.equation.name"), null, equationPanel, LanguageManager.getField("ui.equation.hint"));
 
 		windowPanel = new WindowPanel();
 		pane.addTab("Window", null, windowPanel, "Edit grid bounds and detail level");
