@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 import com.functiongrapher.lang.LanguageManager;
 import com.functiongrapher.lang.LanguageManager.Language;
 import com.functiongrapher.logging.ProgramLogger;
+import com.functiongrapher.threading.ThreadManager;
 import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.windows.GraphWindow;
 import com.functiongrapher.ui.windows.TableWindow;
@@ -36,7 +37,7 @@ public class Main {
 
 		// TODO remember the FPS timer...
 
-		Thread graphwindowthread = new Thread(() -> {
+		ThreadManager.createAndStartThread(() -> {
 			GraphicsController.initGLFW();
 			GraphWindow.setWindowID(GraphicsController.getWindowID());
 			GraphicsController.attachCallbacks();
@@ -44,11 +45,10 @@ public class Main {
 			GraphWindow.loop();
 			ProgramLogger.info("Beginning shutdown...");
 			GraphicsController.shutdown();
+			ThreadManager.stopThreads();
 			ProgramLogger.info("Shutdown successful. Goodbye!");
 			ProgramLogger.shutdown();
 		});
-		graphwindowthread.start();
-
 	}
 
 }
