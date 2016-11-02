@@ -14,6 +14,8 @@ import javax.swing.filechooser.FileFilter;
 import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.io.PresetFileIO;
 import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.service.IPropertyService;
+import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.ui.EquationEditor;
 import com.functiongrapher.ui.windows.GraphWindow;
 import com.functiongrapher.ui.windows.VarsWindow;
@@ -43,11 +45,12 @@ public class IOPanel extends JPanel {
 			}
 			if (chooser.showSaveDialog(this) == JFileChooser.CANCEL_OPTION)
 				return;
+			IPropertyService svc = ServiceManager.getService();
 			ArrayList<GraphParameter<?>> properties = new ArrayList<GraphParameter<?>>();
-			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_XMIN, FunctionManager.getXmin()));
-			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_XMAX, FunctionManager.getXmax()));
-			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMIN, FunctionManager.getYmin()));
-			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMAX, FunctionManager.getYmax()));
+			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_XMIN, svc.getXMin()));
+			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_XMAX, svc.getXMax()));
+			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMIN, svc.getYMin()));
+			properties.add(new GraphParameter<Double>(GraphProperty.WINDOW_YMAX, svc.getYMax()));
 			properties.add(new GraphParameter<Boolean>(GraphProperty.VIEW_GRAPHMODE, GraphWindow.getGraphMode()));
 			for (EquationEditor ee : FunctionManager.getFunctions()) {
 				properties.add(new GraphParameter<String>(GraphProperty.FUNCTION, ee.getSaveData()));
@@ -70,6 +73,7 @@ public class IOPanel extends JPanel {
 			ArrayList<GraphParameter<?>> properties = PresetFileIO.loadPresetFromFile(chooser.getSelectedFile());
 			boolean ask = false;
 			for (GraphParameter<?> param : properties) {
+				IPropertyService svc = ServiceManager.getService();
 				switch (param.getType()) {
 				case FUNCTION:
 					if (ask == false) {
@@ -91,16 +95,16 @@ public class IOPanel extends JPanel {
 				case WINDOW_GRID_STEPY:
 					break;
 				case WINDOW_XMAX:
-					FunctionManager.setXmax(Double.valueOf(param.getData().toString()));
+					svc.setXMax(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_XMIN:
-					FunctionManager.setXmin(Double.valueOf(param.getData().toString()));
+					svc.setXMin(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_YMAX:
-					FunctionManager.setYmax(Double.valueOf(param.getData().toString()));
+					svc.setYMax(Double.valueOf(param.getData().toString()));
 					break;
 				case WINDOW_YMIN:
-					FunctionManager.setYmin(Double.valueOf(param.getData().toString()));
+					svc.setYMin(Double.valueOf(param.getData().toString()));
 					break;
 				case VIEW_GRAPHMODE:
 					((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getViewPanel().setGraphMode(Boolean.valueOf(param.getData().toString()));

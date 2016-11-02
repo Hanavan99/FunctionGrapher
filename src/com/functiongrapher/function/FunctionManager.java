@@ -1,12 +1,18 @@
 package com.functiongrapher.function;
 
 import java.awt.Color;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.service.IPropertyService;
+import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.ui.EquationEditor;
+import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.panels.EquationPanel;
 import com.functiongrapher.ui.windows.VarsWindow;
 import com.functiongrapher.ui.windows.WindowManager;
@@ -15,14 +21,8 @@ public class FunctionManager {
 
 	private static ArrayList<EquationEditor> functions = new ArrayList<EquationEditor>();
 
-	private static double xmin = -10.0d;
-	private static double xmax = 10.0d;
-	private static double ymin = -10.0d;
-	private static double ymax = 10.0d;
 	private static double delta2D = 1d / 32;
 	private static double delta3D = 1d / 2;
-	private static double gridStepX2D = 1.0d;
-	private static double gridStepY2D = 1.0d;
 
 	public static void addFunction(EquationEditor ee) {
 		functions.add(ee);
@@ -48,55 +48,15 @@ public class FunctionManager {
 		((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel().updateList();
 	}
 
-	public static double getXmin() {
-		return xmin;
-	}
-
-	public static void setXmin(double xmin) {
-		FunctionManager.xmin = xmin;
-	}
-
-	public static double getXmax() {
-		return xmax;
-	}
-
-	public static void setXmax(double xmax) {
-		FunctionManager.xmax = xmax;
-	}
-
-	public static double getYmin() {
-		return ymin;
-	}
-
-	public static void setYmin(double ymin) {
-		FunctionManager.ymin = ymin;
-	}
-
-	public static double getYmax() {
-		return ymax;
-	}
-
-	public static void setYmax(double ymax) {
-		FunctionManager.ymax = ymax;
-	}
-
-	public static double getGridStepX2D() {
-		return gridStepX2D;
-	}
-
-	public static void setGridStepX2D(double gridStepX2D) {
-		FunctionManager.gridStepX2D = gridStepX2D;
-	}
-
-	public static double getGridStepY2D() {
-		return gridStepY2D;
-	}
-
-	public static void setGridStepY2D(double gridStepY2D) {
-		FunctionManager.gridStepY2D = gridStepY2D;
-	}
-
 	public static void drawFunctions(boolean is3D, double t) {
+
+		FloatBuffer axes = GLFW.glfwGetJoystickAxes(GLFW.GLFW_JOYSTICK_1);
+		
+		IPropertyService svc = ServiceManager.getService();
+		double xmin = svc.getXMin();
+		double xmax = svc.getXMax();
+		double ymin = svc.getYMin();
+		double ymax = svc.getYMax();
 
 		if (is3D) {
 			// Draw 3D axes
@@ -115,13 +75,51 @@ public class FunctionManager {
 			GL11.glLineWidth(1f);
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glColor3d(0.7d, 0.7d, 0.7d);
-			for (double x = xmin; x <= xmax; x += gridStepX2D) {
+			for (double x = xmin; x <= xmax; x += svc.getGridX()) {
 				GL11.glVertex2d(x, ymin);
 				GL11.glVertex2d(x, ymax);
 			}
-			for (double y = ymin; y <= ymax; y += gridStepY2D) {
+			for (double y = ymin; y <= ymax; y += svc.getGridY()) {
 				GL11.glVertex2d(xmin, y);
 				GL11.glVertex2d(xmax, y);
+			}
+			GL11.glEnd();
+
+			// Draw 2D numbers
+			// BufferedImage img = new BufferedImage(64, 64,
+			// BufferedImage.TYPE_INT_ARGB);
+			// img.getGraphics().drawString("test", 4, 4);
+			// DataBuffer data = img.getData().getDataBuffer();
+			// byte[] b = new byte[data.getSize() * 4];
+			// for (int i = 0; i < b.length; i += 4) {
+			// b[i] = (byte) (data.getElem(i / 4) >> 24);
+			// b[i + 1] = (byte) (data.getElem(i / 4) >> 16);
+			// b[i + 2] = (byte) (data.getElem(i / 4) >> 8);
+			// b[i + 3] = (byte) (data.getElem(i / 4) >> 0);
+			// }
+			// ByteBuffer bb = ByteBuffer.wrap(b);
+			// bb.flip();
+			// int tex = GL11.glGenTextures();
+			// GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			// GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+			// GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+			// GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, 64, 64,
+			// 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, bb);
+			// GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			int[] textures = GraphicsController.getTextures();
+			int i = 0;
+			GL13.glActiveTexture(textures[i]);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures[i]);
+			GL11.glBegin(GL11.GL_QUADS);
+			for (double x = xmin; x <= xmax; x += svc.getGridX()) {
+				GL11.glTexCoord2d(0, 0);
+				GL11.glVertex2d(x - 0.25d, -0.5d);
+				GL11.glTexCoord2d(0, 1);
+				GL11.glVertex2d(x - 0.25d, 0d);
+				GL11.glTexCoord2d(1, 1);
+				GL11.glVertex2d(x + 0.25d, 0d);
+				GL11.glTexCoord2d(1, 0);
+				GL11.glVertex2d(x + 0.25d, -0.5d);
 			}
 			GL11.glEnd();
 
@@ -193,6 +191,8 @@ public class FunctionManager {
 				}
 				GL11.glEnd();
 			}
+			svc.setCameraYaw(svc.getCameraYaw() + (axes.get(0) * 2));
+			svc.setCameraPitch(svc.getCameraPitch() + (axes.get(1) * 2));
 		} else {
 			GL11.glLineWidth(3f);
 			EquationEditor[] funcs = new EquationEditor[0];
@@ -213,7 +213,15 @@ public class FunctionManager {
 				}
 				GL11.glEnd();
 			}
+			ymin += axes.get(0);
+			ymax += axes.get(0);
+			xmin += axes.get(1);
+			xmax += axes.get(1);
 		}
+		ServiceManager.getService().setXMin(xmin);
+		ServiceManager.getService().setXMax(xmax);
+		ServiceManager.getService().setYMin(ymin);
+		ServiceManager.getService().setYMax(ymax);
 	}
 
 }

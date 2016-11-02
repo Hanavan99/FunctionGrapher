@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -11,6 +12,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.function.FunctionManager;
+import com.functiongrapher.service.IPropertyService;
+import com.functiongrapher.service.ServiceManager;
 
 public class GraphWindow {
 
@@ -22,11 +25,8 @@ public class GraphWindow {
 	private static BufferedImage screenshot = null;
 	private static float yawspeed = 0.0f;
 
-	private static int cameraxpos = 0;
-	private static int cameraypos = 0;
-	private static float camerapitch = -50.0f;
-	private static float camerayaw = 0.0f;
-	private static float cameraroll = 0.0f;
+	private static float cameraxpos = 0;
+	private static float cameraypos = 0;
 	private static float camerafov = 70.0f;
 	private static float camerazoom = 30.0f;
 
@@ -46,6 +46,8 @@ public class GraphWindow {
 
 	private static int mouse1state;
 	private static int prevmouse1state;
+	
+	private static IPropertyService svc = ServiceManager.getService();
 
 	public static void mouseScrolled(double amount) {
 		if (camerazoom >= 5 && camerazoom <= 300) {
@@ -75,16 +77,16 @@ public class GraphWindow {
 				cameraypos--;
 				break;
 			case GLFW.GLFW_KEY_LEFT:
-				camerayaw -= 3;
+				svc.setCameraYaw(svc.getCameraYaw() - 3);
 				break;
 			case GLFW.GLFW_KEY_RIGHT:
-				camerayaw += 3;
+				svc.setCameraYaw(svc.getCameraYaw() + 3);
 				break;
 			case GLFW.GLFW_KEY_DOWN:
-				camerapitch -= 3;
+				svc.setCameraPitch(svc.getCameraPitch() - 3);
 				break;
 			case GLFW.GLFW_KEY_UP:
-				camerapitch += 3;
+				svc.setCameraPitch(svc.getCameraPitch() + 3);
 				break;
 			case GLFW.GLFW_KEY_RIGHT_BRACKET:
 				if (camerazoom >= 5) {
@@ -132,6 +134,8 @@ public class GraphWindow {
 
 	public static void loop() {
 
+		IPropertyService svc = ServiceManager.getService();
+		
 		while (!glfwWindowShouldClose(window)) {
 
 			int[] width = new int[1], height = new int[1];
@@ -146,7 +150,7 @@ public class GraphWindow {
 			if (is3D) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			} else {
-				createOrthographic(width[0], height[0], (float) FunctionManager.getXmin(), (float) FunctionManager.getXmax(), (float) FunctionManager.getYmin(), (float) FunctionManager.getYmax());
+				createOrthographic(width[0], height[0], (float) svc.getXMin(), (float) svc.getXMax(), (float) svc.getYMin(), (float) svc.getYMax());
 			}
 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -155,10 +159,10 @@ public class GraphWindow {
 			// ------------ TRANSFORMATION ------------
 
 			if (is3D) {
-				GL11.glTranslatef(0.0f, 0.0f, -camerazoom);
-				GL11.glRotatef(camerapitch + temppitch, 1.0f, 0.0f, 0.0f);
-				GL11.glRotatef(cameraroll, 0.0f, 1.0f, 0.0f);
-				GL11.glRotatef(camerayaw + tempyaw, 0.0f, 0.0f, 1.0f);
+				GL11.glTranslatef(0.0f, 0.0f, (float) -svc.getCameraZoom());
+				GL11.glRotatef((float) svc.getCameraPitch() + temppitch, 1.0f, 0.0f, 0.0f);
+				GL11.glRotatef((float) svc.getCameraRoll(), 0.0f, 1.0f, 0.0f);
+				GL11.glRotatef((float) svc.getCameraYaw() + tempyaw, 0.0f, 0.0f, 1.0f);
 				GL11.glTranslatef(cameraxpos, cameraypos, 0.0f);
 			}
 
@@ -168,7 +172,7 @@ public class GraphWindow {
 
 			FunctionManager.drawFunctions(is3D, (double) totfps / 10);
 
-			camerayaw += yawspeed;
+			svc.setCameraYaw(svc.getCameraYaw()  + yawspeed);
 
 			// ------------ -------------- ------------
 
@@ -188,8 +192,8 @@ public class GraphWindow {
 					mousex = (int) xpos[0];
 					mousey = (int) ypos[0];
 				} else if (prevmouse1state == 1 && mouse1state == 0) {
-					camerayaw += tempyaw;
-					camerapitch += temppitch;
+					svc.setCameraYaw(svc.getCameraYaw()  + tempyaw);
+					svc.setCameraPitch(svc.getCameraPitch()  + temppitch);
 					tempyaw = 0;
 					temppitch = 0;
 				}
@@ -252,18 +256,6 @@ public class GraphWindow {
 
 	public static void setControlState(boolean controllable) {
 		controlslocked = !controllable;
-	}
-
-	public static void setCameraYaw(float yaw) {
-		camerayaw = yaw;
-	}
-
-	public static void setCameraPitch(float pitch) {
-		camerapitch = pitch;
-	}
-
-	public static void setCameraRoll(float roll) {
-		cameraroll = roll;
 	}
 
 	public static void setYawRotateSpeed(float speed) {

@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 import com.functiongrapher.lang.LanguageManager;
 import com.functiongrapher.lang.LanguageManager.Language;
 import com.functiongrapher.logging.ProgramLogger;
+import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.threading.ThreadManager;
 import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.windows.GraphWindow;
@@ -24,6 +25,8 @@ public class Main {
 
 		}
 
+		ServiceManager.init();
+		
 		LanguageManager.setLanguage(Language.EN_US);
 		ProgramLogger.init();
 

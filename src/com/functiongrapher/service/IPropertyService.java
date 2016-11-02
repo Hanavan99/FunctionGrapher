@@ -14,6 +14,14 @@ public interface IPropertyService {
 	
 	public void setGridY(double value);
 	
+	public void setCameraPitch(double value);
+	
+	public void setCameraYaw(double value);
+	
+	public void setCameraRoll(double value);
+	
+	public void setCameraZoom(double value);
+	
 	public double getXMin();
 	
 	public double getXMax();
@@ -26,8 +34,16 @@ public interface IPropertyService {
 	
 	public double getGridY();
 	
+	public double getCameraPitch();
+	
+	public double getCameraYaw();
+	
+	public double getCameraRoll();
+	
+	public double getCameraZoom();
+	
 	public boolean is3D();
 	
-	public boolean setIs3D();
+	public void setIs3D(boolean value);
 	
 }
