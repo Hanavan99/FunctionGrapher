@@ -48,7 +48,7 @@ public class FunctionManager {
 		((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel().updateList();
 	}
 
-	public static void drawFunctions(boolean is3D, double t) {
+	public static void drawFunctions(double t) {
 
 		FloatBuffer axes = GLFW.glfwGetJoystickAxes(GLFW.GLFW_JOYSTICK_1);
 		
@@ -58,7 +58,7 @@ public class FunctionManager {
 		double ymin = svc.getYMin();
 		double ymax = svc.getYMax();
 
-		if (is3D) {
+		if (svc.is3D()) {
 			// Draw 3D axes
 			GL11.glLineWidth(3f);
 			GL11.glBegin(GL11.GL_LINES);
@@ -76,12 +76,12 @@ public class FunctionManager {
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glColor3d(0.7d, 0.7d, 0.7d);
 			for (double x = xmin; x <= xmax; x += svc.getGridX()) {
-				GL11.glVertex2d(x, ymin);
-				GL11.glVertex2d(x, ymax);
+				GL11.glVertex2d(x - xmin % svc.getGridX(), ymin);
+				GL11.glVertex2d(x - xmin % svc.getGridX(), ymax);
 			}
 			for (double y = ymin; y <= ymax; y += svc.getGridY()) {
-				GL11.glVertex2d(xmin, y);
-				GL11.glVertex2d(xmax, y);
+				GL11.glVertex2d(xmin, y - ymin % svc.getGridY());
+				GL11.glVertex2d(xmax, y - ymin % svc.getGridY());
 			}
 			GL11.glEnd();
 
@@ -134,11 +134,7 @@ public class FunctionManager {
 			GL11.glEnd();
 		}
 
-		if (functions.size() == 0) {
-			return;
-		}
-
-		if (is3D) {
+		if (svc.is3D()) {
 			GL11.glLineWidth(2f);
 			EquationEditor[] funcs = new EquationEditor[0];
 			funcs = functions.toArray(funcs);
@@ -213,10 +209,14 @@ public class FunctionManager {
 				}
 				GL11.glEnd();
 			}
-			ymin += axes.get(0);
-			ymax += axes.get(0);
-			xmin += axes.get(1);
-			xmax += axes.get(1);
+			xmin -= axes.get(0) / 4;
+			xmax -= axes.get(0) / 4;
+			ymin -= axes.get(1) / 4;
+			ymax -= axes.get(1) / 4;
+			xmin *= 1 + axes.get(2);
+			xmax *= 1 + axes.get(2);
+			ymin *= 1 + axes.get(2);
+			ymax *= 1 + axes.get(2);
 		}
 		ServiceManager.getService().setXMin(xmin);
 		ServiceManager.getService().setXMax(xmax);

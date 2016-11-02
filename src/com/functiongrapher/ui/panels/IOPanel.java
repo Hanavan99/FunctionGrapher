@@ -107,7 +107,7 @@ public class IOPanel extends JPanel {
 					svc.setYMin(Double.valueOf(param.getData().toString()));
 					break;
 				case VIEW_GRAPHMODE:
-					((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getViewPanel().setGraphMode(Boolean.valueOf(param.getData().toString()));
+					svc.setIs3D(Boolean.valueOf(param.getData().toString()));
 					break;
 				default:
 					break;

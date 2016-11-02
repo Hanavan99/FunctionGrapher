@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.ui.windows.GraphWindow;
 
 public class ViewPanel extends JPanel {
@@ -56,12 +57,8 @@ public class ViewPanel extends JPanel {
 		graphicsMode = new JComboBox<String>(new String[] {"2D", "3D"});
 		graphicsMode.setBounds(10, 70, 100, 20);
 		add(graphicsMode);
-		graphicsMode.addActionListener((ActionEvent e) -> GraphWindow.setIs3D(graphicsMode.getSelectedIndex() == 1));
+		graphicsMode.addActionListener((ActionEvent e) -> ServiceManager.getService().setIs3D(graphicsMode.getSelectedIndex() == 1));
 
-	}
-	
-	public void setGraphMode(boolean graphMode) {
-		graphicsMode.setSelectedIndex(graphMode == true ? 1 : 0);
 	}
 
 }

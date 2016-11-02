@@ -4,7 +4,6 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -46,8 +45,8 @@ public class GraphWindow {
 
 	private static int mouse1state;
 	private static int prevmouse1state;
-	
-	private static IPropertyService svc = ServiceManager.getService();
+
+	private static IPropertyService svc;
 
 	public static void mouseScrolled(double amount) {
 		if (camerazoom >= 5 && camerazoom <= 300) {
@@ -134,7 +133,9 @@ public class GraphWindow {
 
 	public static void loop() {
 
-		IPropertyService svc = ServiceManager.getService();
+		if (svc == null) {
+			svc = ServiceManager.getService();
+		}
 		
 		while (!glfwWindowShouldClose(window)) {
 
@@ -147,7 +148,7 @@ public class GraphWindow {
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
 
-			if (is3D) {
+			if (svc.is3D()) {
 				createPerspective((double) camerafov, dwidth / dheight, 0.1, 1000);
 			} else {
 				createOrthographic(width[0], height[0], (float) svc.getXMin(), (float) svc.getXMax(), (float) svc.getYMin(), (float) svc.getYMax());
@@ -158,7 +159,7 @@ public class GraphWindow {
 
 			// ------------ TRANSFORMATION ------------
 
-			if (is3D) {
+			if (svc.is3D()) {
 				GL11.glTranslatef(0.0f, 0.0f, (float) -svc.getCameraZoom());
 				GL11.glRotatef((float) svc.getCameraPitch() + temppitch, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef((float) svc.getCameraRoll(), 0.0f, 1.0f, 0.0f);
@@ -170,9 +171,9 @@ public class GraphWindow {
 
 			// ------------ RENDERING CODE ------------
 
-			FunctionManager.drawFunctions(is3D, (double) totfps / 10);
+			FunctionManager.drawFunctions((double) totfps / 10);
 
-			svc.setCameraYaw(svc.getCameraYaw()  + yawspeed);
+			svc.setCameraYaw(svc.getCameraYaw() + yawspeed);
 
 			// ------------ -------------- ------------
 
@@ -192,8 +193,8 @@ public class GraphWindow {
 					mousex = (int) xpos[0];
 					mousey = (int) ypos[0];
 				} else if (prevmouse1state == 1 && mouse1state == 0) {
-					svc.setCameraYaw(svc.getCameraYaw()  + tempyaw);
-					svc.setCameraPitch(svc.getCameraPitch()  + temppitch);
+					svc.setCameraYaw(svc.getCameraYaw() + tempyaw);
+					svc.setCameraPitch(svc.getCameraPitch() + temppitch);
 					tempyaw = 0;
 					temppitch = 0;
 				}
@@ -245,11 +246,11 @@ public class GraphWindow {
 	private static void createOrthographic(int width, int height, float xmin, float xmax, float ymin, float ymax) {
 		GL11.glOrtho(xmin, xmax, ymin, ymax, -1, 1);
 	}
-	
+
 	public static boolean getGraphMode() {
 		return is3D;
 	}
-	
+
 	public static void setGraphMode(boolean is3D) {
 		GraphWindow.is3D = is3D;
 	}
