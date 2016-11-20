@@ -10,12 +10,12 @@ This is a semi-current list of the current features that are in the program. I c
 + Multi-graph support
 + Cinematic mode (fancy rotating graphs)
 + Changeable window
-+ Antialiasing (on some systems)
++ Antialiasing (on most systems)
++ Exporting and importing graph files (loading and saving equations)
 
 ### Planned Features
 This is another semi-current list that contains features that I __will__ be adding to the program. I don't know when I will get to all of them, but most of them will be added to the next release.
 
-+ Exporting and importing graph files (loading and saving equations)
 + Changing axis/grid colors
 
 ### Possible Features
