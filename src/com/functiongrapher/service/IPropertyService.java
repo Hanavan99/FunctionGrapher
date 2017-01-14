@@ -1,5 +1,7 @@
 package com.functiongrapher.service;
 
+import com.functiongrapher.ui.gfx.DrawMode;
+
 public interface IPropertyService {
 
 	public void setXMin(double value);
@@ -44,6 +46,18 @@ public interface IPropertyService {
 	
 	public boolean is3D();
 	
+	public boolean areTilesEnabled();
+	
+	public boolean areLinesEnabled();
+	
+	public DrawMode getDrawMode();
+	
 	public void setIs3D(boolean value);
+	
+	public void setTilesEnabled(boolean value);
+	
+	public void setLinesEnabled(boolean value);
+	
+	public void setDrawMode(DrawMode value);
 	
 }

@@ -18,8 +18,6 @@ import com.functiongrapher.service.IPropertyService;
 import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.ui.EquationEditor;
 import com.functiongrapher.ui.windows.GraphWindow;
-import com.functiongrapher.ui.windows.VarsWindow;
-import com.functiongrapher.ui.windows.WindowManager;
 import com.functiongrapher.util.GraphParameter;
 import com.functiongrapher.util.GraphProperty;
 
@@ -87,7 +85,7 @@ public class IOPanel extends JPanel {
 					EquationEditor ee = new EquationEditor(subdata[0]);
 					ee.setEquationType(Integer.valueOf(subdata[1]));
 					ee.setEquationColor(new Color(Integer.valueOf(subdata[2]), Integer.valueOf(subdata[3]), Integer.valueOf(subdata[4])));
-					ee.setEquationText(subdata[5]);
+					ee.setEquationText(subdata[5].replace("%newline%", "\n"));
 					FunctionManager.addFunction(ee);
 					break;
 				case WINDOW_GRID_STEPX:

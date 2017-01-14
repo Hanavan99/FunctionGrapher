@@ -8,8 +8,11 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
 
+import com.functiongrapher.function.FunctionManager;
 import com.functiongrapher.service.ServiceManager;
+import com.functiongrapher.ui.gfx.DrawMode;
 import com.functiongrapher.ui.windows.GraphWindow;
 
 public class ViewPanel extends JPanel {
@@ -18,13 +21,17 @@ public class ViewPanel extends JPanel {
 
 	private JCheckBox enableControl;
 	private JSpinner yawSpeed;
+	private JSpinner scale3d;
 
 	private JCheckBox runFullscreen;
-	
+	private JCheckBox drawTiles;
+	private JCheckBox drawLines;
+
 	private JComboBox<String> graphicsMode;
+	private JComboBox<DrawMode> drawMode;
 
 	private ActionListener controlUpdater;
-	
+
 	public ViewPanel() {
 		setLayout(null);
 
@@ -58,7 +65,32 @@ public class ViewPanel extends JPanel {
 		graphicsMode.setBounds(10, 70, 100, 20);
 		add(graphicsMode);
 		graphicsMode.addActionListener((ActionEvent e) -> ServiceManager.getService().setIs3D(graphicsMode.getSelectedIndex() == 1));
+		
+		drawTiles = new JCheckBox("Draw tiles");
+		drawTiles.setSelected(true);
+		drawTiles.setBounds(10, 100, 300, 20);
+		add(drawTiles);
+		drawTiles.addActionListener((ActionEvent e) -> ServiceManager.getService().setTilesEnabled(drawTiles.isSelected()));
+		
+		drawLines = new JCheckBox("Draw lines");
+		drawLines.setSelected(true);
+		drawLines.setBounds(10, 130, 300, 20);
+		add(drawLines);
+		drawLines.addActionListener((ActionEvent e) -> ServiceManager.getService().setLinesEnabled(drawLines.isSelected()));
 
+		drawMode = new JComboBox<DrawMode>(DrawMode.values());
+		drawMode.setSelectedItem(DrawMode.LINES_WITH_FILL);
+		drawMode.setBounds(10, 160, 200, 20);
+		add(drawMode);
+		drawMode.addActionListener((ActionEvent e) -> ServiceManager.getService().setDrawMode((DrawMode) drawMode.getSelectedItem()));
+		
+		scale3d = new JSpinner(new SpinnerNumberModel(0.25, 0.0625, 2, 0.125));
+		scale3d.setBounds(10, 190, 200, 20);
+		add(scale3d);
+		scale3d.getModel().addChangeListener((ChangeEvent e) -> {
+			FunctionManager.setDelta3D(Double.parseDouble(scale3d.getValue().toString()));
+		});
+		
 	}
 
 }

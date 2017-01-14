@@ -1,6 +1,7 @@
 package com.functiongrapher.ui.gfx;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
@@ -26,6 +27,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.main.ProgramInfo;
+import com.functiongrapher.ui.textures.TextureManager;
 import com.functiongrapher.ui.windows.GraphWindow;
 import com.functiongrapher.ui.windows.VarsWindow;
 import com.functiongrapher.ui.windows.WindowManager;
@@ -111,6 +113,8 @@ public class GraphicsController {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+		TextureManager.generateGlyphSet(new Font("Arial", Font.PLAIN, 12), "Arial");
+		
 		textures = new int[] { createTexture("test", GL13.GL_TEXTURE0) };
 	}
 

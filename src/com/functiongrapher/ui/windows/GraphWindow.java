@@ -155,6 +155,7 @@ public class GraphWindow {
 			}
 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glLoadIdentity();
 			GL11.glPushMatrix();
 
 			// ------------ TRANSFORMATION ------------
@@ -178,6 +179,7 @@ public class GraphWindow {
 			// ------------ -------------- ------------
 
 			GL11.glPopMatrix();
+			GLFW.glfwSwapInterval(1);
 			GLFW.glfwSwapBuffers(window);
 			GLFW.glfwPollEvents();
 

@@ -1,5 +1,7 @@
 package com.functiongrapher.service;
 
+import com.functiongrapher.ui.gfx.DrawMode;
+
 public class PropertyServiceImpl implements IPropertyService {
 
 	private double xmin = -10, xmax = 10;
@@ -7,6 +9,9 @@ public class PropertyServiceImpl implements IPropertyService {
 	private double gridx = 1, gridy = 1;
 	private double camerapitch = -50, camerayaw = 0, cameraroll = 0, camerazoom = 30;
 	private boolean is3D = false;
+	private boolean drawTiles = true;
+	private boolean drawLines = true;
+	private DrawMode drawMode = DrawMode.LINES_WITH_FILL;
 
 	@Override
 	public void setXMin(double value) {
@@ -116,6 +121,37 @@ public class PropertyServiceImpl implements IPropertyService {
 	@Override
 	public void setIs3D(boolean value) {
 		is3D = value;
+	}
+
+	@Override
+	public boolean areTilesEnabled() {
+		return drawTiles;
+	}
+
+	@Override
+	public void setTilesEnabled(boolean value) {
+		drawTiles = value;
+	}
+
+	@Override
+	public boolean areLinesEnabled() {
+		return drawLines;
+	}
+
+	@Override
+	public DrawMode getDrawMode() {
+		return drawMode;
+	}
+
+	@Override
+	public void setLinesEnabled(boolean value) {
+		drawLines = value;
+	}
+
+	@Override
+	public void setDrawMode(DrawMode value) {
+		drawMode = value;
+		
 	}
 
 }
