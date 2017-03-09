@@ -1,6 +1,7 @@
 package com.functiongrapher.function;
 
 import java.awt.Color;
+import java.math.BigDecimal;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import com.functiongrapher.service.IPropertyService;
 import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.ui.EquationEditor;
 import com.functiongrapher.ui.panels.EquationPanel;
-import com.functiongrapher.ui.textures.TextureManager;
+import com.functiongrapher.ui.textures.GlyphManager;
 import com.functiongrapher.ui.windows.VarsWindow;
 import com.functiongrapher.ui.windows.WindowManager;
 
@@ -74,6 +75,7 @@ public class FunctionManager {
 			GL11.glVertex3d(0, 0, -10);
 			GL11.glVertex3d(0, 0, 10);
 			GL11.glEnd();
+
 		} else {
 			// Draw 2D gridlines
 			GL11.glLineWidth(1f);
@@ -89,23 +91,21 @@ public class FunctionManager {
 			}
 			GL11.glEnd();
 
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glColor3d(1, 1, 1);
-			TextureManager.getTexture("test").bind();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex3d(0, 0, 0.5);
-			GL11.glTexCoord2d(0, 0);
-			GL11.glVertex3d(0, 1, 0.5);
-			GL11.glTexCoord2d(0, 1);
-			GL11.glVertex3d(1, 1, 0.5);
-			GL11.glTexCoord2d(1, 1);
-			GL11.glVertex3d(1, 0, 0.5);
-			GL11.glTexCoord2d(1, 0);
-			GL11.glEnd();
-			// TextureManager.getTexture("test").
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-
 			// Draw 2D numbers
+			double textsize = 0.4;
+			GL11.glColor3d(1, 1, 1);
+			for (double x = xmin; x <= xmax; x += svc.getGridX()) {
+				if (x != 0) {
+					String s = new BigDecimal(x).toPlainString();
+					GlyphManager.drawString("default", s, x - (GlyphManager.stringWidth("default", s, textsize) / 2), -0.5, 0.5, textsize);
+				}
+			}
+			for (double y = ymin; y <= ymax; y += svc.getGridY()) {
+				if (y != 0) {
+					String s = new BigDecimal(y).toPlainString();
+					GlyphManager.drawString("default", s, 0.1, y - (textsize / 2), 0.5, textsize);
+				}
+			}
 
 			// Draw 2D axes
 			GL11.glLineWidth(3f);
@@ -256,6 +256,7 @@ public class FunctionManager {
 				svc.setCameraYaw(svc.getCameraYaw() + (axes.get(0) * 2));
 				svc.setCameraPitch(svc.getCameraPitch() + (axes.get(1) * 2));
 			}
+
 		} else {
 			GL11.glLineWidth(3f);
 			EquationEditor[] funcs = new EquationEditor[0];

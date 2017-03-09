@@ -1,6 +1,7 @@
 package com.functiongrapher.main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +15,7 @@ import com.functiongrapher.logging.ProgramLogger;
 import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.threading.ThreadManager;
 import com.functiongrapher.ui.gfx.GraphicsController;
+import com.functiongrapher.ui.textures.GlyphManager;
 import com.functiongrapher.ui.textures.TextureManager;
 import com.functiongrapher.ui.windows.GraphWindow;
 import com.functiongrapher.ui.windows.TableWindow;
@@ -38,7 +40,7 @@ public class Main {
 		ProgramLogger.init();
 
 		ProgramLogger.info("Starting program...");
-		WindowManager.showSplashScreen(000, 1000);
+		WindowManager.showSplashScreen(3000, 1000);
 		ProgramLogger.setSplashScreenSubtext("Loading lang file...");
 		LanguageManager.loadLangFile();
 		ProgramLogger.setSplashScreenSubtext("Opening vars window...");
@@ -60,13 +62,8 @@ public class Main {
 			g.setColor(Color.BLACK);
 			g.drawOval(0, 0, 15, 15);
 			g.drawString("test", 0, 8);
-			// GL11.glEnable(GL11.GL_TEXTURE_2D);
-			try {
-				BufferedImage i2 = ImageIO.read(new File("C:/Users/Hanavan/Desktop/Images/test_item.png"));
-				TextureManager.createTexture("test", i);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			TextureManager.createTexture("test", i);
+			GlyphManager.generateGlyphSet("default", new Font("Arial", Font.PLAIN, 256), 256, 256);
 
 			GraphWindow.loop();
 			ProgramLogger.info("Beginning shutdown...");

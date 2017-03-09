@@ -11,10 +11,10 @@ import org.lwjgl.opengl.GL11;
 public class TextureManager {
 
 	private static final int internalFormat = GL11.GL_RGB;
-	private static final int bytesPerPixel = 3;
+	private static final int bytesPerPixel = 4;
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	
-	public static void createTexture(String name, BufferedImage img) {
+	public static int createTexture(String name, BufferedImage img) {
 		try {
 			int tex = GL11.glGenTextures();
 			System.out.println(tex);
@@ -33,15 +33,17 @@ public class TextureManager {
 				data[i * bytesPerPixel + 0] = (float) c.getRed() / 255;
 				data[i * bytesPerPixel + 1] = (float) c.getGreen() / 255;
 				data[i * bytesPerPixel + 2] = (float) c.getBlue() / 255;
-				//data[i * 4 + 3] = (float) c.getAlpha() / 255;
+				data[i * bytesPerPixel + 3] = (float) c.getAlpha() / 255;
 				
 			}
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, img.getWidth(), img.getHeight(), 0, GL11.GL_RGB, GL11.GL_FLOAT, data);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL11.GL_RGBA, GL11.GL_FLOAT, data);
 			Texture t = new Texture(img.getWidth(), img.getHeight(), tex);
 			System.out.println(t.getTextureID());
 			textures.put(name, t);
+			return tex;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return -1;
 		}
 	}
 	
