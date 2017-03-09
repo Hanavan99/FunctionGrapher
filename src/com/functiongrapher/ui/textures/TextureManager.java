@@ -3,21 +3,18 @@ package com.functiongrapher.ui.textures;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
 public class TextureManager {
 
-	private static final int internalFormat = GL11.GL_RGB;
 	private static final int bytesPerPixel = 4;
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	
 	public static int createTexture(String name, BufferedImage img) {
 		try {
 			int tex = GL11.glGenTextures();
-			System.out.println(tex);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
 			GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
@@ -38,7 +35,6 @@ public class TextureManager {
 			}
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, img.getWidth(), img.getHeight(), 0, GL11.GL_RGBA, GL11.GL_FLOAT, data);
 			Texture t = new Texture(img.getWidth(), img.getHeight(), tex);
-			System.out.println(t.getTextureID());
 			textures.put(name, t);
 			return tex;
 		} catch (Exception e) {

@@ -19,4 +19,8 @@ public class Glyph extends Texture {
 		return internalwidth;
 	}
 	
+	public char getGlyph() {
+		return glyph;
+	}
+	
 }

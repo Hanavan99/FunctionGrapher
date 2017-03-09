@@ -1,12 +1,7 @@
 package com.functiongrapher.main;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 
 import com.functiongrapher.lang.LanguageManager;
@@ -16,7 +11,6 @@ import com.functiongrapher.service.ServiceManager;
 import com.functiongrapher.threading.ThreadManager;
 import com.functiongrapher.ui.gfx.GraphicsController;
 import com.functiongrapher.ui.textures.GlyphManager;
-import com.functiongrapher.ui.textures.TextureManager;
 import com.functiongrapher.ui.windows.GraphWindow;
 import com.functiongrapher.ui.windows.TableWindow;
 import com.functiongrapher.ui.windows.VarsWindow;
@@ -55,14 +49,6 @@ public class Main {
 			GraphicsController.attachCallbacks();
 			GraphicsController.initGL();
 
-			BufferedImage i = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-			Graphics g = i.getGraphics();
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, 15, 15);
-			g.setColor(Color.BLACK);
-			g.drawOval(0, 0, 15, 15);
-			g.drawString("test", 0, 8);
-			TextureManager.createTexture("test", i);
 			GlyphManager.generateGlyphSet("default", new Font("Arial", Font.PLAIN, 256), 256, 256);
 
 			GraphWindow.loop();
