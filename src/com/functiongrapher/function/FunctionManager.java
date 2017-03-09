@@ -1,14 +1,11 @@
 package com.functiongrapher.function;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import com.functiongrapher.main.ProgramInfo;
 import com.functiongrapher.service.IPropertyService;
@@ -33,8 +30,7 @@ public class FunctionManager {
 
 	public static void addFunction(EquationEditor ee) {
 		functions.add(ee);
-		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL))
-				.getEquationPanel();
+		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
 		panel.add(ee);
 		panel.updateList();
 
@@ -42,8 +38,7 @@ public class FunctionManager {
 
 	public static void removeFunction(EquationEditor ee) {
 		functions.remove(ee);
-		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL))
-				.getEquationPanel();
+		EquationPanel panel = ((VarsWindow) WindowManager.getWindow(ProgramInfo.WINDOW_VARS_NAME_INTERNAL)).getEquationPanel();
 		panel.remove(ee);
 		panel.updateList();
 	}
@@ -94,10 +89,23 @@ public class FunctionManager {
 			}
 			GL11.glEnd();
 
-			//GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glColor3d(1, 1, 1);
+			TextureManager.getTexture("test").bind();
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex3d(0, 0, 0.5);
+			GL11.glTexCoord2d(0, 0);
+			GL11.glVertex3d(0, 1, 0.5);
+			GL11.glTexCoord2d(0, 1);
+			GL11.glVertex3d(1, 1, 0.5);
+			GL11.glTexCoord2d(1, 1);
+			GL11.glVertex3d(1, 0, 0.5);
+			GL11.glTexCoord2d(1, 0);
+			GL11.glEnd();
+			// TextureManager.getTexture("test").
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
 
 			// Draw 2D numbers
-			
 
 			// Draw 2D axes
 			GL11.glLineWidth(3f);
@@ -125,8 +133,7 @@ public class FunctionManager {
 							double xoffset = f.evalPoint(x + delta3D, y, t);
 							if (f.useMethodForColor()) {
 								Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, y, t), 1.0f, 1.0f);
-								GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255,
-										((double) c.getBlue()) / 255);
+								GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255);
 							} else {
 								GL11.glColor3dv(f.getGraphColor());
 							}
@@ -143,8 +150,7 @@ public class FunctionManager {
 							double yoffset = f.evalPoint(x, y + delta3D, t);
 							if (f.useMethodForColor()) {
 								Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, y, t), 1.0f, 1.0f);
-								GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255,
-										((double) c.getBlue()) / 255);
+								GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255);
 							} else {
 								GL11.glColor3dv(f.getGraphColor());
 							}
@@ -263,8 +269,7 @@ public class FunctionManager {
 					double xoffset = f.evalPoint(x + delta2D, 0, t);
 					if (f.useMethodForColor()) {
 						Color c = Color.getHSBColor((float) f.getEvaluatedHue(x, 0, t), 1.0f, 1.0f);
-						GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255,
-								((double) c.getBlue()) / 255);
+						GL11.glColor3d(((double) c.getRed()) / 255, ((double) c.getGreen()) / 255, ((double) c.getBlue()) / 255);
 					}
 					GL11.glVertex2d(x, basepoint);
 					GL11.glVertex2d(x + delta2D, xoffset);
